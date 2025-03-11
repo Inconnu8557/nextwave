@@ -50,7 +50,8 @@ export const PostDetail = ({ postId }: Props) => {
         Posted on: {new Date(data!.created_at).toLocaleDateString()}
       </p>
 
-      <LikeButton postId={postId} />
+      <LikeButton postId={postId} />``
+      <CommentSection post_id={postId}/>
     </div>
   );
 };
