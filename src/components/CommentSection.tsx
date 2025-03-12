@@ -16,7 +16,7 @@ export const CommentSection = ({ postId }: Props) => {
           <button type="submit">Post Comment</button>
         </form>
       ) : (
-        <p>You must be logged in to post a comment</p>
+        <p className="">You must be logged in to post a comment</p>
       )}
     </div>
   );
