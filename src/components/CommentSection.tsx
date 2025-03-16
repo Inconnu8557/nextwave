@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 
 interface Props {
   postId: number;
 }
+export interface Comment {
+  id: number;
+  post_id: number;
+  parent_comments_id: number | null;
+  content: string;
+  user_id: string;
+  created_at: string;
+  author: string;
+}
 interface NewComment {
   content: string;
-  parent_comment_id?: number | null;
+  parent_comments_id?: number | null;
 }
 
 const CreateComment = async (
@@ -23,16 +32,37 @@ const CreateComment = async (
   const { error } = await supabase.from("comments").insert({
     post_id: postId,
     content: newComment.content,
-    parent_comment_id: newComment.parent_comment_id || null,
+    parent_comment_id: newComment.parent_comments_id || null,
     user_id: userId,
     author: author,
   });
   if (error) throw new Error(error.message);
 };
 
+const fetchComments = async (postId: number): Promise<Comment[]> => {
+  const { data, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return data as Comment[];
+};
+
 export const CommentSection = ({ postId }: Props) => {
   const [newCommentText, setNewCommentText] = useState<string>("");
   const { user } = useAuth();
+
+  const {
+    data: comments,
+    isLoading,
+    error,
+  } = useQuery<Comment[], Error>({
+    queryKey: ["comments", postId],
+    queryFn: () => fetchComments(postId),
+    refetchInterval: 5000,
+  });
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (newComment: NewComment) =>
       CreateComment(
@@ -45,9 +75,20 @@ export const CommentSection = ({ postId }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCommentText) return;
-    mutate({ content: newCommentText, parent_comment_id: null });
+    mutate({ content: newCommentText, parent_comments_id: null });
     setNewCommentText("");
   };
+  const buildCommentTree = () => {
+    
+  } 
+
+  if (isLoading) {
+    return <div> Loading comments...</div>;
+  }
+
+  if (error) {
+    return <div> Error: {error.message}</div>;
+  }
   return (
     <div className="mt-6">
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
@@ -76,6 +117,9 @@ export const CommentSection = ({ postId }: Props) => {
           You must be logged in to post a comment.
         </p>
       )}
+      <div>
+        {commentTree}
+      </div>
     </div>
   );
 };
