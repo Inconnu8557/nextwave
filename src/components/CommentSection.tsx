@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
@@ -78,9 +78,24 @@ export const CommentSection = ({ postId }: Props) => {
     mutate({ content: newCommentText, parent_comments_id: null });
     setNewCommentText("");
   };
-  const buildCommentTree = () => {
-    
-  } 
+  const buildCommentTree = (
+    flatComments: Comment[]
+  ): (Comment & { children?: Comment[] })[] => {
+    const map = new Map<number, Comment & { children?: Comment[] }>();
+    const roots: (Comment & { children?: Comment[] })[] = [];
+    flatComments.forEach((comment) => {
+      map.set(comment.id, { ...comment, children: [] });
+    });
+    flatComments.forEach((comment) => {
+      if (comment.parent_comments_id) {
+        const parent = map.get(comment.parent_comments_id)
+        if (parent) {
+          parent.children
+        }
+      }
+    });
+    return [];
+  };
 
   if (isLoading) {
     return <div> Loading comments...</div>;
@@ -89,6 +104,7 @@ export const CommentSection = ({ postId }: Props) => {
   if (error) {
     return <div> Error: {error.message}</div>;
   }
+  const commentTree = comments ? buildCommentTree(comments) : [];
   return (
     <div className="mt-6">
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
@@ -117,9 +133,7 @@ export const CommentSection = ({ postId }: Props) => {
           You must be logged in to post a comment.
         </p>
       )}
-      <div>
-        {commentTree}
-      </div>
+      {/* <div>{commentTree}</div> */}
     </div>
   );
 };
