@@ -1,12 +1,14 @@
 import React, { Children, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
+import { CommentItem } from "./CommentItem";
 
 interface Props {
   postId: number;
 }
 export interface Comment {
+  children: never[];
   id: number;
   post_id: number;
   parent_comments_id: number | null;
@@ -32,7 +34,7 @@ const CreateComment = async (
   const { error } = await supabase.from("comments").insert({
     post_id: postId,
     content: newComment.content,
-    parent_comment_id: newComment.parent_comments_id || null,
+    parent_comments_id: newComment.parent_comments_id || null,
     user_id: userId,
     author: author,
   });
@@ -53,6 +55,7 @@ const fetchComments = async (postId: number): Promise<Comment[]> => {
 export const CommentSection = ({ postId }: Props) => {
   const [newCommentText, setNewCommentText] = useState<string>("");
   const { user } = useAuth();
+  const QueryClient = useQueryClient();
 
   const {
     data: comments,
@@ -71,6 +74,9 @@ export const CommentSection = ({ postId }: Props) => {
         user?.id,
         user?.user_metadata?.user_name
       ),
+    onSuccess: () => {
+      QueryClient.invalidateQueries({ queryKey: ["comments", postId] });
+    },
   });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,17 +90,19 @@ export const CommentSection = ({ postId }: Props) => {
     const map = new Map<number, Comment & { children?: Comment[] }>();
     const roots: (Comment & { children?: Comment[] })[] = [];
     flatComments.forEach((comment) => {
-      map.set(comment.id, { ...comment, children: [] });
+      map.set(comment.id, { ...comment, children: comment.children || [] });
     });
     flatComments.forEach((comment) => {
       if (comment.parent_comments_id) {
-        const parent = map.get(comment.parent_comments_id)
+        const parent = map.get(comment.parent_comments_id);
         if (parent) {
-          parent.children
+          parent.children!.push(map.get(comment.id)!);
         }
+      } else {
+        roots.push(map.get(comment.id)!);
       }
     });
-    return [];
+    return roots;
   };
 
   if (isLoading) {
@@ -133,7 +141,11 @@ export const CommentSection = ({ postId }: Props) => {
           You must be logged in to post a comment.
         </p>
       )}
-      {/* <div>{commentTree}</div> */}
+      <div>
+        {commentTree.map((comment, key) => (
+          <CommentItem key={key} comment={comment} postId={postId} />
+        ))}
+      </div>
     </div>
   );
 };
