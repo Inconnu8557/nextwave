@@ -33,6 +33,7 @@ const CreateReply = async (
 export const CommentItem = ({ comment, postId }: Props) => {
   const [showReply, setShowReply] = useState<boolean>(false);
   const [replyText, setReplyText] = useState<string>("");
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   const { user } = useAuth();
   const QueryClient = useQueryClient();
@@ -88,7 +89,49 @@ export const CommentItem = ({ comment, postId }: Props) => {
       )}
       {comment.children && comment.children.length > 0 && (
         <div>
-          <button>Show Replies</button>
+          <button
+            onClick={() => setIsCollapsed((prev) => !prev)}
+            title={isCollapsed ? "Hide Replies" : "Show Replies"}
+          >
+            {isCollapsed ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 15l7-7 7 7"
+                />
+              </svg>
+            )}
+          </button>
+          {!isCollapsed && (
+            <div className="space-y-2">
+              {comment.children.map((child, key) => (
+                <CommentItem key={key} comment={child} postId={postId}/>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
