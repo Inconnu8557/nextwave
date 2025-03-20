@@ -36,6 +36,15 @@ export const PostItem = ({ post }: Props) => {
               className="w-full rounded-[20px] object-cover max-h-[150px] mx-auto"
             />
           </div>
+
+          <div>
+            <span>
+              ❤️ <span>{post.like_count ?? 0}</span>
+            </span>
+            <span>
+              💬 <span>{post.comment_count ?? 0}</span>
+            </span>
+          </div>
         </div>
       </Link>
     </div>
