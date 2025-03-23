@@ -11,22 +11,13 @@ interface Props {
 const fetchPostById = async (id: number): Promise<Post> => {
   const { data, error } = await supabase
     .from("posts")
-    .select(`
-      *,
-      user:user_id (
-        avatar_url,
-        username
-      )
-    `)
+    .select("*")
     .eq("id", id)
     .single();
 
   if (error) throw new Error(error.message);
 
-  return {
-    ...data,
-    profile: data?.user
-  } as Post;
+  return data as Post;
 };
 
 export const PostDetail = ({ postId }: Props) => {
@@ -64,9 +55,9 @@ export const PostDetail = ({ postId }: Props) => {
       {/* En-tête du post */}
       <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 mb-8">
         <div className="flex items-center space-x-4 mb-6">
-          {post?.profile?.avatar_url ? (
+          {post?.avatar_url ? (
             <img
-              src={post.profile.avatar_url}
+              src={post.avatar_url}
               alt="Avatar"
               className="w-14 h-14 rounded-full object-cover ring-2 ring-purple-500/50"
             />
@@ -88,14 +79,6 @@ export const PostDetail = ({ postId }: Props) => {
                   year: 'numeric'
                 })}
               </span>
-              {post?.profile?.username && (
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  {post.profile.username}
-                </span>
-              )}
             </div>
           </div>
         </div>

@@ -9,14 +9,9 @@ export interface Post {
   content: string;
   created_at: string;
   image_url: string;
-  user_id: string;
-  avatar_url?: string;
+  avatar_url: string | null;
   like_count?: number;
   comment_count?: number;
-  profile?: {
-    username: string;
-    avatar_url: string;
-  };
 }
 
 const fetchPosts = async (): Promise<Post[]> => {
