@@ -64,9 +64,9 @@ export const PostDetail = ({ postId }: Props) => {
       {/* En-tête du post */}
       <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 mb-8">
         <div className="flex items-center space-x-4 mb-6">
-          {post?.avatar_url ? (
+          {post?.profile?.avatar_url ? (
             <img
-              src={post.avatar_url}
+              src={post.profile.avatar_url}
               alt="Avatar"
               className="w-14 h-14 rounded-full object-cover ring-2 ring-purple-500/50"
             />
