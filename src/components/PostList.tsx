@@ -12,7 +12,7 @@ export interface Post {
   avatar_url?: string;
   like_count?: number;
   comment_count?: number;
-  profiles?: {
+  profile?: {
     username: string;
     avatar_url: string;
   };
