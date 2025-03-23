@@ -13,7 +13,7 @@ const fetchPostById = async (id: number): Promise<Post> => {
     .from("posts")
     .select(`
       *,
-      profile:profile_id (
+      user:user_id (
         avatar_url,
         username
       )
@@ -23,7 +23,10 @@ const fetchPostById = async (id: number): Promise<Post> => {
 
   if (error) throw new Error(error.message);
 
-  return data as Post;
+  return {
+    ...data,
+    profile: data?.user
+  } as Post;
 };
 
 export const PostDetail = ({ postId }: Props) => {
