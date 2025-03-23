@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { PostItem } from "./PostItem";
+import { data } from "react-router";
 
 export interface Post {
   id: number;
@@ -20,6 +21,8 @@ const fetchPosts = async (): Promise<Post[]> => {
 
   return data as Post[];
 };
+
+console.log(data); 
 
 export const PostList = () => {
   const { data, error, isLoading } = useQuery<Post[], Error>({

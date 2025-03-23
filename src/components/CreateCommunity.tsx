@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { data, useNavigate } from "react-router";
 import { supabase } from "../supabase-client";
@@ -17,10 +17,11 @@ export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const navigate = useNavigate();
+  const QueryClient = useQueryClient();
   const { mutate, isPending, isError } = useMutation({
     mutationFn: createCommunity,
     onSuccess: () => {
-      // QueryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      QueryClient.invalidateQueries({ queryKey: ["communities"] });
       navigate("/communities");
     },
   });
