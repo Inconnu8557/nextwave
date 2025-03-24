@@ -36,3 +36,39 @@
   opacity: 1;
   transform: translateY(0);
 }
+h1, h2, h3 {
+  font-family: 'Roboto', sans-serif; /* Utilisation d'une police moderne */
+  font-weight: 700;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif; /* Autre police moderne */
+  line-height: 1.6; /* Amélioration de la lisibilité */
+}
+
+body {
+  background-color: #f0f4f8; /* Couleur de fond moderne */
+  color: #333; /* Couleur de texte */
+}
+
+.button {
+  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); /* Dégradé pour les boutons */
+  color: white;
+}
+
+.container {
+  padding: 20px; /* Espacement autour du contenu */
+  margin: 0 auto; /* Centrage du contenu */
+  max-width: 1200px; /* Largeur maximale */
+}
+
+.card {
+  margin-bottom: 20px; /* Espacement entre les cartes */
+  border-radius: 8px; /* Coins arrondis pour un look moderne */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre pour profondeur */
+}
+
+.button:hover {
+  transform: scale(1.05); /* Effet de zoom au survol */
+  transition: transform 0.3s ease; /* Transition douce */
+} 
