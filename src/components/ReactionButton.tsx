@@ -36,6 +36,7 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
   const [showReactions, setShowReactions] = useState(false);
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [userHasReacted, setUserHasReacted] = useState(false);
 
   const { data: reactions = [] } = useQuery<Reaction[]>({
     queryKey: ["reactions", postId],
