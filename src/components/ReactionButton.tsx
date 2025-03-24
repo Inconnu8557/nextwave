@@ -42,22 +42,50 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
     queryFn: () => fetchReactions(postId),
   });
 
-  const { mutate: addReaction } = useMutation({
-    mutationFn: async (reactionType: string) => {
-      const { data, error } = await supabase
-        .from("reactions")
-        .upsert({
-          post_id: postId,
-          user_id: user?.id,
-          type: reactionType,
-        });
+  const userReaction = reactions.find(r => r.user_id === user?.id);
 
-      if (error) throw error;
-      return data;
+  const { mutate: addOrUpdateReaction } = useMutation({
+    mutationFn: async (reactionType: string) => {
+      try {
+        if (userReaction) {
+          if (userReaction.type === reactionType) {
+            // Si l'utilisateur clique sur la même réaction, supprimez-la
+            const { error } = await supabase
+              .from("reactions")
+              .delete()
+              .eq("id", userReaction.id);
+
+            if (error) throw error;
+            return;
+          } else {
+            // Sinon, mettez à jour la réaction existante
+            const { data, error } = await supabase
+              .from("reactions")
+              .update({ type: reactionType })
+              .eq("id", userReaction.id);
+
+            if (error) throw error;
+            return data;
+          }
+        } else {
+          // Ajoutez une nouvelle réaction
+          const { data, error } = await supabase
+            .from("reactions")
+            .insert({
+              post_id: postId,
+              user_id: user?.id,
+              type: reactionType,
+            });
+
+          if (error) throw error;
+          return data;
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'ajout ou de la mise à jour de la réaction:", error);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reactions", postId] });
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
@@ -73,45 +101,42 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
     <div className="relative">
       <button
         onClick={() => setShowReactions(!showReactions)}
-        className="text-gray-400 hover:text-gray-300 transition-colors"
+        className="text-2xl text-gray-400 transition-colors hover:text-gray-300"
       >
         😀
       </button>
 
       {showReactions && (
-        <div className="absolute bottom-full left-0 mb-2 bg-[rgb(24,27,32)] border border-[rgb(84,90,106)] rounded-lg p-2 shadow-xl min-w-[200px]">
-          <div className="space-y-2">
+        <div className="absolute bottom-full left-0 mb-2 bg-gray-800 border border-gray-600 rounded-lg p-4 shadow-xl min-w-[250px] transition-opacity duration-300 ease-in-out">
+          <div className="grid grid-cols-2 gap-2">
             {REACTIONS.map((reaction) => (
               <button
                 key={reaction.type}
                 onClick={() => {
-                  addReaction(reaction.type);
+                  addOrUpdateReaction(reaction.type);
                   setShowReactions(false);
                 }}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors ${
-                  hasUserReacted(reaction.type) ? 'bg-purple-500/20' : ''
+                className={`flex items-center justify-center p-3 rounded-lg transition-colors duration-200 ${
+                  userReaction?.type === reaction.type ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
                 title={reaction.label}
               >
-                <span className="flex items-center">
-                  <span className="text-xl mr-2">{reaction.type}</span>
-                  <span className="text-sm text-gray-400">{reaction.label}</span>
-                </span>
-                <span className="text-sm text-gray-500">{getReactionCount(reaction.type)}</span>
+                <span className="text-3xl">{reaction.type}</span>
+                <span className="ml-2 text-sm">{getReactionCount(reaction.type)}</span>
               </button>
             ))}
           </div>
         </div>
       )}
 
-      <div className="flex -space-x-1 mt-2">
+      <div className="flex mt-2 -space-x-1">
         {REACTIONS.map(reaction => {
           const count = getReactionCount(reaction.type);
           if (count > 0) {
             return (
               <div
                 key={reaction.type}
-                className="bg-white/5 px-2 py-1 rounded-full text-sm flex items-center"
+                className="flex items-center px-2 py-1 text-sm rounded-full bg-white/5"
                 title={`${count} ${reaction.label}`}
               >
                 <span className="mr-1">{reaction.type}</span>

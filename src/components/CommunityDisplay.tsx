@@ -3,6 +3,7 @@ import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
 import { PostItem } from "./PostItem";
 import { Link } from "react-router";
+import { ReactionButton } from "./ReactionButton";
 
 interface Props {
   communityId: number;
@@ -39,11 +40,11 @@ export const CommunityDisplay = ({ communityId }: Props) => {
   }
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 mb-8">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+      <div className="p-8 mb-8 border bg-white/5 backdrop-blur-sm border-white/10 rounded-xl">
+        <h2 className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
           {data && data[0]?.communities.name}
         </h2>
-        <div className="mt-6 flex items-center space-x-4 text-gray-400">
+        <div className="flex items-center mt-6 space-x-4 text-gray-400">
           <span className="flex items-center">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -60,14 +61,17 @@ export const CommunityDisplay = ({ communityId }: Props) => {
       </div>
 
       {data && data.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {data.map((post, key) => (
-            <PostItem key={key} post={post} />
+            <div key={key}>
+              <PostItem post={post} />
+              <ReactionButton postId={post.id} />
+            </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="py-12 text-center border bg-white/5 backdrop-blur-sm border-white/10 rounded-xl">
+          <svg className="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
           <p className="mt-4 text-lg text-gray-400">
@@ -75,7 +79,7 @@ export const CommunityDisplay = ({ communityId }: Props) => {
           </p>
           <Link
             to="/create"
-            className="inline-block mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+            className="inline-block px-4 py-2 mt-4 text-white transition-colors bg-purple-500 rounded-lg hover:bg-purple-600"
           >
             Créer la première publication
           </Link>
