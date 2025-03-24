@@ -36,7 +36,6 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
   const [showReactions, setShowReactions] = useState(false);
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [userHasReacted, setUserHasReacted] = useState(false);
 
   const { data: reactions = [] } = useQuery<Reaction[]>({
     queryKey: ["reactions", postId],
@@ -92,10 +91,6 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
 
   const getReactionCount = (type: string) => {
     return reactions.filter(r => r.type === type).length;
-  };
-
-  const hasUserReacted = (type: string) => {
-    return reactions.some(r => r.type === type && r.user_id === user?.id);
   };
 
   return (
