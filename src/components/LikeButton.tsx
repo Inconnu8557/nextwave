@@ -95,10 +95,10 @@ export const LikeButton = ({ postId }: Props) => {
   const userVote = votes?.find((v) => v.user_id === user?.id)?.vote;
 
   return (
-    <div className="flex items-center space-x-4 my-4">
+    <div className="flex items-center my-4 space-x-6">
       <button
         onClick={() => mutate(1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
+        className={`px-4 py-2 cursor-pointer rounded transition-colors duration-150 ${
           userVote === 1 ? "bg-green-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
@@ -106,7 +106,7 @@ export const LikeButton = ({ postId }: Props) => {
       </button>
       <button
         onClick={() => mutate(-1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
+        className={`px-4 py-2 cursor-pointer rounded transition-colors duration-150 ${
           userVote === -1 ? "bg-red-500 text-white" : "bg-gray-200 text-black"
         }`}
       >

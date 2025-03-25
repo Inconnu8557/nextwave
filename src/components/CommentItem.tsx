@@ -59,7 +59,7 @@ export const CommentItem = ({ comment, postId }: Props) => {
   };
   return (
     <div className="pl-4 my-4 border-l-2 rounded-lg shadow-lg border-purple-500/20">
-      <div className="p-4 transition-transform rounded-lg bg-white/10 hover:scale-105">
+      <div className="p-4 transition-transform rounded-lg bg-white/10 hover:scale-103">
         <div className="flex items-center mb-2 space-x-3">
           <span className="font-medium text-purple-400">{comment.author}</span>
           <span className="text-sm text-gray-500">{new Date(comment.created_at).toLocaleDateString()}</span>

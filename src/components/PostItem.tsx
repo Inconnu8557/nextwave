@@ -9,7 +9,7 @@ export const PostItem = ({ post }: Props) => {
   return (
     <div className="relative group">
       <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 blur group-hover:opacity-75 transition-all duration-300 pointer-events-none"></div>
-      <Link to={`/post/${post.id}`} className="block relative z-10">
+      <Link to={`/post/${post.id}`} className="relative z-10 block">
         <div className="w-[360px] bg-[rgba(24,27,32,0.8)] backdrop-blur-sm border border-white/10 rounded-[20px] text-white flex flex-col p-6 overflow-hidden transition-all duration-300 group-hover:scale-[1.02] group-hover:border-white/20">
           {/* Header: Avatar and Title */}
           <div className="flex items-center space-x-4">
@@ -39,16 +39,20 @@ export const PostItem = ({ post }: Props) => {
           </div>
 
           {/* Footer with Reactions */}
-          <div className="mt-5 flex items-center justify-between">
+          <div className="flex items-center justify-between mt-5">
             <div className="flex items-center space-x-3">
-              <span className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-full hover:bg-white/10 transition-colors">
-                <span className="text-xl">❤️</span>
+              <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
+                <span className="text-xl">👍</span>
                 <span className="text-sm font-medium">{post.like_count ?? 0}</span>
               </span>
-              <span className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-full hover:bg-white/10 transition-colors">
+              <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
                 <span className="text-xl">💬</span>
                 <span className="text-sm font-medium">{post.comment_count ?? 0}</span>
               </span>
+              {/* <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
+                <span className="text-xl">😀</span>
+                <span className="text-sm font-medium">{post.reaction_count ?? 0}</span>
+              </span> */}
             </div>
             
             <div className="flex items-center text-sm text-gray-400">

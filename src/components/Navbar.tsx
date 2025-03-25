@@ -47,7 +47,7 @@ export const Navbar = () => {
           {/* Desktop Auth */}
           <div className="items-center hidden md:flex">
             {user ? (
-              <div className="flex items-center space-x-4">
+              <div className="relative flex items-center space-x-4">
                 {user.user_metadata?.avatar_url && (
                   <img
                     src={user.user_metadata.avatar_url}
@@ -55,13 +55,31 @@ export const Navbar = () => {
                     className="object-cover w-8 h-8 border rounded-full shadow-md border-white/20"
                   />
                 )}
-                <span className="text-gray-300">{displayName}</span>
+                <span 
+                  className="text-gray-300 cursor-pointer" 
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                >
+                  {displayName}
+                </span>
                 <button
                   onClick={signOut}
                   className="px-3 py-1 transition-colors bg-red-500 rounded shadow-md hover:bg-red-600"
                 >
                   Sign Out
                 </button>
+La partie que tu dois modifier : 
+                {menuOpen && (
+                  <div className="absolute right-0 z-50 w-48 mt-1 bg-gray-800 rounded-md shadow-lg">
+                    <Link to="/profile" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">Profile</Link>
+                    <Link to="/settings" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">Settings</Link>
+                    <button 
+                      onClick={signOut} 
+                      className="block w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <button

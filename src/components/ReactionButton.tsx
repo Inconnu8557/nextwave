@@ -20,6 +20,7 @@ const REACTIONS = [
   { type: "🎉", label: "Célébrer" },
   { type: "🤔", label: "Réfléchir" },
   { type: "😢", label: "Triste" },
+  { type: "😂", label: "Rire"},
 ];
 
 const fetchReactions = async (postId: number): Promise<Reaction[]> => {
@@ -97,14 +98,15 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
     <div className="relative">
       <button
         onClick={() => setShowReactions(!showReactions)}
-        className="text-2xl text-gray-400 transition-colors hover:text-gray-300"
+        className="flex items-center mb-2 text-2xl text-gray-400 transition-colors hover:text-gray-300"
       >
         😀
+        <span className="ml-2 text-sm">{getReactionCount("😀")}</span>
       </button>
 
       {showReactions && (
         <div className="absolute bottom-full left-0 mb-2 bg-gray-800 border border-gray-600 rounded-lg p-4 shadow-xl min-w-[250px] transition-opacity duration-300 ease-in-out">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-4">
             {REACTIONS.map((reaction) => (
               <button
                 key={reaction.type}
