@@ -144,7 +144,6 @@ export const Navbar = () => {
                     </button>
                   </div>
                 )}
-                )
               </div>
             ) : (
               <button
