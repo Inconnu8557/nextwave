@@ -122,7 +122,6 @@ export const Navbar = () => {
                 >
                   Sign Out
                 </button>
-                La partie que tu dois modifier :
                 {menuOpen && (
                   <div className="absolute right-0 z-50 w-48 mt-1 bg-gray-800 rounded-md shadow-lg">
                     <Link
