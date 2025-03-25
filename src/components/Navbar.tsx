@@ -123,7 +123,7 @@ export const Navbar = () => {
                   Sign Out
                 </button>
                 {menuOpen && (
-                  <div className="absolute right-0 z-50 w-48 mt-1 bg-gray-800 rounded-md shadow-lg">
+                  <div className="absolute left-0 z-50 w-48 mt-1 bg-gray-800 rounded-md shadow-lg top-full">
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-gray-300 hover:bg-gray-700"
@@ -144,6 +144,7 @@ export const Navbar = () => {
                     </button>
                   </div>
                 )}
+                )
               </div>
             ) : (
               <button
