@@ -6,17 +6,8 @@ import { PostPage } from './pages/PostPage'
 import { CreateCommunityPages } from './pages/CreateCommunityPage'
 import { CommunitiesPage } from './pages/CommunitiesPage'
 import { CommunityPage } from './pages/CommunityPage'
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Remplacez useHistory par useNavigate
 
 function App() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirige vers la page d'accueil à chaque chargement de la page
-    navigate("/");
-  }, [navigate]);
-
   return (
     <div className='min-h-screen text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900'>
       <div className='fixed inset-0 bg-[url("/grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
