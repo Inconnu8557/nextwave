@@ -1,225 +1,107 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { JSX, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Menu, X, User, LogOut, Settings, Home, Users, PlusSquare, ChevronDown } from "lucide-react";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { signInWithGithub, signOut, user } = useAuth();
-
   const displayName = user?.user_metadata.user_name || user?.email;
 
   return (
-    <nav className="fixed top-0 z-40 w-full transition-all duration-300 border-b border-gray-700 shadow-lg bg-gradient-to-r from-gray-800 to-gray-900 backdrop-blur-lg">
-      <div className="max-w-5xl px-4 mx-auto">
+    <nav className="fixed top-0 z-50 w-full transition-all duration-300 border-b shadow-md backdrop-blur-lg bg-white/10 border-white/10">
+      <div className="max-w-6xl px-6 mx-auto">
         <div className="flex items-center justify-between h-16">
-          <Link
-            to="/"
-            className="font-mono text-2xl font-bold text-white transition-transform transform hover:scale-105"
-          >
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-extrabold text-white transition-transform hover:scale-105">
             Next<span className="text-purple-500">.Wave</span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="items-center hidden space-x-8 font-extrabold md:flex">
-            <Link
-              to="/"
-              className="flex items-center text-gray-300 transition-colors hover:text-white hover:underline"
-            >
-              <svg
-                className="w-5 h-5 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 12h18M3 6h18M3 18h18"
-                />
-              </svg>
-              Home
-            </Link>
-            <Link
-              to="/create"
-              className="flex items-center text-gray-300 transition-colors hover:text-white hover:underline"
-            >
-              <svg
-                className="w-5 h-5 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Create Post
-            </Link>
-            <Link
-              to="/communities"
-              className="flex items-center text-gray-300 transition-colors hover:text-white hover:underline"
-            >
-              <svg
-                className="w-5 h-5 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Communities
-            </Link>
-            <Link
-              to="/community/create"
-              className="flex items-center text-gray-300 transition-colors hover:text-white hover:underline"
-            >
-              <svg
-                className="w-5 h-5 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Create Community
-            </Link>
+          {/* Desktop Navigation */}
+          <div className="items-center hidden space-x-6 font-medium text-white md:flex">
+            <NavItem to="/" icon={<Home size={18} />} text="Home" />
+            <NavItem to="/create" icon={<PlusSquare size={18} />} text="Create Post" />
+            <NavItem to="/communities" icon={<Users size={18} />} text="Communities" />
+            <NavItem to="/community/create" icon={<PlusSquare size={18} />} text="Create Community" />
           </div>
 
-          {/* Desktop Auth */}
-          <div className="items-center hidden md:flex">
+          {/* User Section */}
+          <div className="items-center hidden space-x-4 md:flex">
             {user ? (
-              <div className="relative flex items-center space-x-4">
-                {user.user_metadata?.avatar_url && (
-                  <img
-                    src={user.user_metadata.avatar_url}
-                    alt="User Avatar"
-                    className="object-cover w-8 h-8 border rounded-full shadow-md border-white/20"
-                  />
-                )}
-                <span
-                  className="text-gray-300 cursor-pointer"
-                  onClick={() => setMenuOpen((prev) => !prev)}
-                >
-                  {displayName}
-                </span>
-                <button
-                  onClick={signOut}
-                  className="px-3 py-1 transition-colors bg-red-500 rounded shadow-md hover:bg-red-600"
-                >
-                  Sign Out
-                </button>
-                {menuOpen && (
-                  <div className="absolute left-0 z-50 w-48 mt-1 bg-gray-800 rounded-md shadow-lg top-full">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-gray-300 hover:bg-gray-700"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="block px-4 py-2 text-gray-300 hover:bg-gray-700"
-                    >
-                      Settings
-                    </Link>
-                    <button
-                      onClick={signOut}
-                      className="block w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
+              <UserMenu displayName={displayName} avatar={user.user_metadata?.avatar_url} signOut={signOut} />
             ) : (
-              <button
-                onClick={signInWithGithub}
-                className="px-3 py-1 transition-colors bg-blue-500 rounded shadow-md hover:bg-blue-600"
-              >
+              <button onClick={signInWithGithub} className="px-4 py-2 text-white transition bg-blue-600 rounded-lg hover:bg-blue-700">
                 Sign in with GitHub
               </button>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMenuOpen((prev) => !prev)}
-              className="text-gray-300 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                {menuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white md:hidden">
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/"
-              className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700"
-            >
-              Home
-            </Link>
-            <Link
-              to="/create"
-              className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700"
-            >
-              Create Post
-            </Link>
-            <Link
-              to="/communities"
-              className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700"
-            >
-              Communities
-            </Link>
-            <Link
-              to="/community/create"
-              className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700"
-            >
-              Create Community
-            </Link>
+        <div className="absolute left-0 w-full py-4 transition-all md:hidden top-16 bg-gray-900/90 backdrop-blur-md">
+          <div className="flex flex-col items-center space-y-4 text-white">
+            <NavItem to="/" icon={<Home size={20} />} text="Home" />
+            <NavItem to="/create" icon={<PlusSquare size={20} />} text="Create Post" />
+            <NavItem to="/communities" icon={<Users size={20} />} text="Communities" />
+            <NavItem to="/community/create" icon={<PlusSquare size={20} />} text="Create Community" />
+
+            {user ? (
+              <UserMenu displayName={displayName} avatar={user.user_metadata?.avatar_url} signOut={signOut} mobile />
+            ) : (
+              <button onClick={signInWithGithub} className="px-4 py-2 transition bg-blue-600 rounded-lg hover:bg-blue-700">
+                Sign in with GitHub
+              </button>
+            )}
           </div>
         </div>
       )}
     </nav>
+  );
+};
+
+/* Composant NavItem (Factorisation des liens) */
+const NavItem = ({ to, icon, text }: { to: string; icon: JSX.Element; text: string }) => (
+  <Link to={to} className="flex items-center space-x-2 text-gray-300 transition hover:text-white">
+    {icon}
+    <span>{text}</span>
+  </Link>
+);
+
+/* Composant UserMenu avec menu déroulant au clic */
+const UserMenu = ({ displayName, avatar, signOut, mobile = false }: { displayName: string; avatar?: string; signOut: () => void; mobile?: boolean }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className={`relative ${mobile ? "flex flex-col items-center" : "flex items-center space-x-3"}`}>
+      {avatar && <img src={avatar} alt="Avatar" className="w-8 h-8 border border-gray-400 rounded-full" />}
+      
+      {/* Bouton pour ouvrir le menu */}
+      <button onClick={() => setMenuOpen(!menuOpen)} className="flex items-center text-gray-300 transition hover:text-white">
+        <span>{displayName}</span>
+        <ChevronDown size={18} className={`ml-1 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+      </button>
+
+      {/* Menu déroulant positionné en dessous */}
+      {menuOpen && (
+        <div className={`absolute top-full mt-2 left-0 bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-opacity ${mobile ? "relative w-full mt-0" : "w-48"}`}>
+          <Link to="/profile" className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700">
+            <User size={16} className="mr-2" /> Profile
+          </Link>
+          <Link to="/settings" className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700">
+            <Settings size={16} className="mr-2" /> Settings
+          </Link>
+          <button onClick={signOut} className="flex items-center w-full px-4 py-2 text-red-400 hover:bg-gray-700">
+            <LogOut size={16} className="mr-2" /> Sign Out
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
