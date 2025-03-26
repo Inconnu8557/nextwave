@@ -1,10 +1,36 @@
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Pencil } from "lucide-react";
 
 export const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
+  const [newDisplayName, setNewDisplayName] = useState(user?.user_metadata.user_name || user?.email || "");
+  const [isEditing, setIsEditing] = useState(false); // New state for edit mode
   const displayName = user?.user_metadata.user_name || user?.email;
   const avatar = user?.user_metadata.avatar_url;
+
+  const updateUsername = async () => {
+    if (!user) return;
+
+    try {
+      await updateUser(newDisplayName);
+      setIsEditing(false); // Exit edit mode after successful update
+      alert("Username updated successfully!");
+    } catch (error) {
+      console.error("Error updating username:", error);
+      alert("Failed to update username.");
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true); // Enter edit mode
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false); // Cancel edit mode
+    setNewDisplayName(user?.user_metadata.user_name || user?.email || ""); // Reset to original value
+  };
 
   return (
     <div className="min-h-screen pt-20 text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
@@ -35,19 +61,38 @@ export const ProfilePage = () => {
           <h3 className="text-xl font-semibold text-gray-300">Informations du profil</h3>
           <div className="mt-2 space-y-2">
             <p className="text-gray-400">
-              <span className="font-medium text-gray-300">Email :</span> {user?.email}
+              <span className="font-medium text-gray-300">Username :</span>
+              {isEditing ? (
+                <>
+                  <input
+                    type="text"
+                    value={newDisplayName}
+                    onChange={(e) => setNewDisplayName(e.target.value)}
+                    className="px-2 py-1 ml-2 text-white bg-gray-700 rounded"
+                  />
+                  <button onClick={updateUsername} className="px-2 py-1 ml-2 text-white bg-blue-600 rounded">
+                    Save
+                  </button>
+                  <button onClick={handleCancelClick} className="px-2 py-1 ml-2 text-white bg-gray-500 rounded">
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  {displayName}
+                  <button onClick={handleEditClick} className="ml-2 text-gray-300 hover:text-white">
+                    <Pencil />
+                  </button>
+                </>
+              )}
             </p>
             <p className="text-gray-400">
-              <span className="font-medium text-gray-300">Username :</span> {displayName}
+              <span className="font-medium text-gray-300">Email :</span> {user?.email}
             </p>
-            {/* Ajoutez ici d'autres informations du profil */}
           </div>
         </div>
 
         <div className="flex justify-between mt-6">
-          <Link to="/edit-profile" className="px-4 py-2 text-white transition bg-blue-600 rounded-lg hover:bg-blue-700">
-            Éditer le profil
-          </Link>
           <Link to="/settings" className="px-4 py-2 transition bg-gray-600 rounded-lg hover:bg-gray-700">
             Paramètres
           </Link>
