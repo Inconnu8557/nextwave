@@ -191,6 +191,10 @@ export const CreatePost = () => {
             required
           />
         </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-300"></label>
+            <input type="link" className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all" />
+        </div>
 
         <div className="space-y-2">
           <label htmlFor="community" className="block text-sm font-medium text-gray-300">
