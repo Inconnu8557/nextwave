@@ -1,12 +1,15 @@
-import { User } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabase-client";
+import { User } from "@supabase/supabase-js";
 
 interface AuthContextType {
   user: User | null;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string, username: string) => Promise<void>;
   signInWithGithub: () => void;
   signOut: () => void;
-  updateUser: (user_name: string) => Promise<void>;
+  updateUser: (username: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +33,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signInWithGithub = () => {
     supabase.auth.signInWithOAuth({ provider: "github" });
+  };
+  const signInWithEmail = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+  };
+  const signUpWithEmail = async (email: string, password: string, username: string) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          user_name: username,
+        },
+      },
+    });
+    if (error) throw error;
+  };
+
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
   };
 
   const signOut = () => {
@@ -78,7 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGithub, signOut, updateUser }}>
+    <AuthContext.Provider value={{ user, signInWithGithub, signInWithEmail, signUpWithEmail, signOut, updateUser, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

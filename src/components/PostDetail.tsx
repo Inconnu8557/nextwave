@@ -1,3 +1,4 @@
+import { useAuth } from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
@@ -23,10 +24,13 @@ const fetchPostById = async (id: number): Promise<Post> => {
 };
 
 export const PostDetail = ({ postId }: Props) => {
+  const { user } = useAuth();
+  const displayName = user?.user_metadata.user_name || user?.email;
   const { data: post, error, isLoading } = useQuery<Post, Error>({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
   });
+
 
   if (isLoading) {
     return ( 
@@ -70,6 +74,10 @@ export const PostDetail = ({ postId }: Props) => {
             <h1 className="mb-2 text-4xl font-bold text-transparent bg-gradient-to-r from-white to-gray-300 bg-clip-text">
               {post?.title}
             </h1>
+            <span className="text-sm text-gray-400">
+              Publié par {displayName}
+            </span>
+            <br />
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <span className="flex items-center">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

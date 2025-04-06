@@ -80,8 +80,9 @@ export const ProfilePage = () => {
               ) : (
                 <>
                   {displayName}
-                  <button onClick={handleEditClick} className="ml-2 text-gray-300 hover:text-white">
-                    <Pencil />
+                  <button onClick={handleEditClick} className="ml-2 text-gray-400 hover:text-gray-300">
+                    <span className="sr-only">Edit</span>
+                    <Pencil className="hover:text-gray-500"/>
                   </button>
                 </>
               )}

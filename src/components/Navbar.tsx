@@ -1,136 +1,98 @@
 import { JSX, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { User as SupabaseUser } from '@supabase/supabase-js';
 import {
-  Menu,
-  X,
   User,
   LogOut,
   Settings,
-  Home,
-  Users,
-  PlusSquare,
   ChevronDown,
+  Home,
+  PenSquare,
+  Users,
+  Compass
 } from "lucide-react";
 import { SearchBar } from "./SearchBar";
 
 export const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { signInWithGithub, signOut, user } = useAuth();
-  const displayName = user?.user_metadata.user_name || user?.email;
+  const { user, signOut } = useAuth() as { user: SupabaseUser | null, signOut: () => void };
 
   return (
-    <nav className="fixed top-0 z-50 w-full transition-all duration-300 border-b shadow-lg backdrop-blur-xl bg-gray-900/60 border-white/5">
-      <div className="px-4 mx-auto max-w-7xl">
-        <div className="flex items-center justify-between h-14">
+    <nav className="sticky top-0 z-50 border-b bg-black/20 backdrop-blur-lg border-white/10">
+      <div className="container flex items-center justify-between px-4 py-4 mx-auto">
+        {/* Section gauche: Logo et navigation principale */}
+        <div className="flex items-center space-x-6">
           {/* Logo */}
-          <Link
-            to="/"
-            className="text-xl font-extrabold text-white transition-all duration-300 hover:scale-105 hover:text-purple-400"
-          >
-            Next
-            <span className="text-transparent bg-gradient-to-r from-purple-500 to-purple-300 bg-clip-text">
-              .Wave
-            </span>
+          <Link to="/" className="text-2xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+            NextWave
           </Link>
+          
+          {/* Navigation principale */}
+          <div className="flex items-center space-x-2">
+            <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
+            <NavItem to="/explore" icon={<Compass size={18} />} text="Explorer" />
+            <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
+          </div>
+        </div>
 
-          {/* Search Bar - Visible sur Desktop */}
-          <div className="hidden mx-4 md:block md:w-1/4">
+        {/* Section centrale: Barre de recherche */}
+        <div className="flex-1 w-full px-8 mx-4">
+          <div className="max-w-2xl mx-auto transition-all duration-300 focus-within:max-w-full">
             <SearchBar />
           </div>
+        </div>
 
-          {/* Desktop Navigation */}
-          <div className="items-center hidden space-x-6 text-sm font-medium text-white md:flex active:scale-95">
-            <NavItem to="/" icon={<Home size={16} />} text="Home" />
-            <NavItem
-              to="/create"
-              icon={<PlusSquare size={16} />}
-              text="Create Post"
-            />
-            <NavItem
-              to="/communities"
-              icon={<Users size={16} />}
-              text="Communities"
-            />
-            <NavItem
-              to="/community/create"
-              icon={<PlusSquare size={16} />}
-              text="Create Community"
-            />
-          </div>
+        {/* Section droite: Actions utilisateur */}
+        <div className="flex items-center space-x-4">
+          {user ? (
+            <>
+              {/* Boutons de création */}
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/create"
+                  className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                >
+                  <PenSquare size={18} className="mr-2" />
+                  <span className="hidden sm:inline">Créer un post</span>
+                  <span className="sm:hidden">Post</span>
+                </Link>
+                <Link
+                  to="/community/create"
+                  className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+                >
+                  <Users size={18} className="mr-2" />
+                  <span className="hidden sm:inline">Créer une communauté</span>
+                  <span className="sm:hidden">Communauté</span>
+                </Link>
+              </div>
 
-          {/* User Section */}
-          <div className="items-center hidden pl-4 md:flex">
-            {user ? (
-              <UserMenu
-                displayName={displayName}
-                avatar={user.user_metadata?.avatar_url}
-                signOut={signOut}
-              />
-            ) : (
-              <button
-                onClick={signInWithGithub}
-                className="px-3 py-1.5 text-sm text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 hover:shadow-lg hover:shadow-blue-500/20"
+              {/* Menu utilisateur */}
+              <div className="pl-4 border-l border-white/10">
+                <UserMenu 
+                  displayName={user.user_metadata?.username || user.email || 'User'} 
+                  avatar={user.user_metadata?.avatar_url} 
+                  signOut={signOut} 
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <Link
+                to="/signin"
+                className="px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
               >
-                Sign in with GitHub
-              </button>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="p-1.5 text-white transition-all duration-300 rounded-lg hover:bg-white/10 md:hidden"
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+                Connexion
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              >
+                Inscription
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="absolute left-0 w-full py-3 transition-all duration-300 border-b md:hidden top-14 bg-gray-900/90 backdrop-blur-xl border-white/5">
-          {/* Search Bar - Mobile */}
-          <div className="px-4 mb-4">
-            <SearchBar />
-          </div>
-
-          <div className="flex flex-col items-center space-y-4 text-white">
-            <NavItem to="/" icon={<Home size={20} />} text="Home" />
-            <NavItem
-              to="/create"
-              icon={<PlusSquare size={20} />}
-              text="Create Post"
-            />
-            <NavItem
-              to="/communities"
-              icon={<Users size={20} />}
-              text="Communities"
-            />
-            <NavItem
-              to="/community/create"
-              icon={<PlusSquare size={20} />}
-              text="Create Community"
-            />
-
-            {user ? (
-              <UserMenu
-                displayName={displayName}
-                avatar={user.user_metadata?.avatar_url}
-                signOut={signOut}
-                mobile
-              />
-            ) : (
-              <button
-                onClick={signInWithGithub}
-                className="px-4 py-2 transition bg-blue-600 rounded-lg hover:bg-blue-700"
-              >
-                Sign in with GitHub
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

@@ -7,6 +7,8 @@ import { CreateCommunityPages } from "./pages/CreateCommunityPage";
 import { CommunitiesPage } from "./pages/CommunitiesPage";
 import { CommunityPage } from "./pages/CommunityPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { SignUpForm } from "./components/SignUpForm";
+import { SignInForm } from "./components/SignInForm";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <Navbar />
       <div className="container z-10 px-4 py-8 mx-auto">
         <Routes>
+          <Route path="/signin" element={<SignInForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<CreatePostPages />} />
           <Route path="/post/:id" element={<PostPage />} />
