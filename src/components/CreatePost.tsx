@@ -138,9 +138,9 @@ export const CreatePost = () => {
   return (
     <div className="relative">
       {isSuccess && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl flex flex-col items-center animate-success-modal">
-            <div className="w-16 h-16 rounded-full border-4 border-green-500 flex items-center justify-center mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-8 bg-white/10 backdrop-blur-md rounded-2xl animate-success-modal">
+            <div className="flex items-center justify-center w-16 h-16 mb-4 border-4 border-green-500 rounded-full">
               <svg 
                 className="w-8 h-8 text-green-500 animate-success-check" 
                 fill="none" 
@@ -156,13 +156,13 @@ export const CreatePost = () => {
               </svg>
             </div>
             <p className="text-xl font-medium text-white">Post créé avec succès !</p>
-            <p className="text-gray-300 mt-2">Redirection vers l'accueil...</p>
+            <p className="mt-2 text-gray-300">Redirection vers l'accueil...</p>
           </div>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className={`max-w-2xl mx-auto space-y-6 bg-white/5 p-6 rounded-xl border border-white/10 backdrop-blur-sm transition-all duration-300 ${isSuccess ? 'opacity-50 pointer-events-none' : ''}`}>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-8">Créer un nouveau post</h2>
+        <h2 className="mb-8 text-3xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">Créer un nouveau post</h2>
         
         <div className="space-y-2">
           <label htmlFor="title" className="block text-sm font-medium text-gray-300">
@@ -173,7 +173,7 @@ export const CreatePost = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
             required
           />
         </div>
@@ -186,14 +186,14 @@ export const CreatePost = () => {
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
             rows={5}
             required
           />
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-300"></label>
-            <input type="link" className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all" />
+            <input type="link" className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
         </div>
 
         <div className="space-y-2">
@@ -203,7 +203,7 @@ export const CreatePost = () => {
           <select 
             id="community" 
             onChange={handleCommunityChange}
-            className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
           >
             <option value="">-- Sélectionner une communauté --</option>
             {communities?.map((community, key) => (
@@ -232,16 +232,16 @@ export const CreatePost = () => {
           >
             {selectedFile ? (
               <div className="w-full space-y-4">
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/20">
+                <div className="relative w-full overflow-hidden rounded-lg aspect-video bg-black/20">
                   <img
                     src={previewUrl!}
                     alt="Aperçu"
-                    className="absolute inset-0 w-full h-full object-contain"
+                    className="absolute inset-0 object-contain w-full h-full"
                   />
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 p-2 rounded-full transition-colors"
+                    className="absolute p-2 transition-colors rounded-full top-2 right-2 bg-red-500/80 hover:bg-red-500"
                   >
                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -261,7 +261,7 @@ export const CreatePost = () => {
             ) : (
               <div className="space-y-1 text-center">
                 <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
+                  className="w-12 h-12 mx-auto text-gray-400"
                   stroke="currentColor"
                   fill="none"
                   viewBox="0 0 48 48"
@@ -277,7 +277,7 @@ export const CreatePost = () => {
                 <div className="flex text-sm text-gray-400">
                   <label
                     htmlFor="image"
-                    className="relative cursor-pointer rounded-md font-medium text-purple-400 hover:text-purple-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
+                    className="relative font-medium text-purple-400 rounded-md cursor-pointer hover:text-purple-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
                   >
                     <span>Télécharger un fichier</span>
                     <input
@@ -299,13 +299,13 @@ export const CreatePost = () => {
         <button
           type="submit"
           disabled={!selectedFile || isPending}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-3 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? "Publication en cours..." : "Publier"}
         </button>
 
         {isError && (
-          <p className="text-red-500 text-center">Erreur lors de la création du post.</p>
+          <p className="text-center text-red-500">Erreur lors de la création du post.</p>
         )}
       </form>
     </div>
