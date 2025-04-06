@@ -11,7 +11,7 @@ interface PostInput {
   content: string;
   avatar_url: string | null;
   community_id?: number | null;
-  image_url?: string | null; // Add image_url to PostInput
+  image_url?: string | null;
   link?: string | null;
 }
 

@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
+import { MessageCirclePlus } from "lucide-react";
 
 interface Props {
   postId: number;
@@ -115,25 +116,31 @@ export const CommentSection = ({ postId }: Props) => {
   const commentTree = comments ? buildCommentTree(comments) : [];
   return (
     <div className="mt-6">
-      <h3 className="text-2xl font-semibold mb-4">Comments</h3>
+      <h3 className="mb-4 text-2xl font-semibold">Comments</h3>
       {/* Create Comment Section */}
       {user ? (
         <form onSubmit={handleSubmit} className="mb-4">
           <textarea
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            className="w-full border border-white/10 bg-transparent p-2 rounded"
+            className="w-full p-2 bg-transparent border rounded border-white/10"
             placeholder="Write a comment..."
             rows={3}
           />
           <button
             type="submit"
-            className="mt-2 bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+            className="flex items-center gap-2 px-4 py-3 mt-2 font-medium text-white transition-colors bg-purple-600 rounded-lg hover:bg-purple-700"
           >
-            {isPending ? "Posting..." : "Post Comment"}
+            {isPending ? (
+              "Posting..."
+            ) : (
+              <>
+                Post Comment <MessageCirclePlus />
+              </>
+            )}
           </button>
           {isError && (
-            <p className="text-red-500 mt-2">Error posting comment.</p>
+            <p className="mt-2 text-red-500">Error posting comment.</p>
           )}
         </form>
       ) : (
