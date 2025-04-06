@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { Community, fetchCommunities } from "./CommunityList";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import ReactMarkdown from 'react-markdown';
 
 interface PostInput {
   title: string;
@@ -38,12 +39,13 @@ const createPost = async (post: PostInput, imageFile: File) => {
 };
 
 export const CreatePost = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<PostInput>();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<PostInput>();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [communityId, setCommunityId] = useState<number | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -135,6 +137,8 @@ export const CreatePost = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const content = watch("content");
+
   return (
     <div className="relative">
       {isSuccess && (
@@ -184,15 +188,37 @@ export const CreatePost = () => {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-300">
-            Contenu
-          </label>
-          <textarea
-            id="content"
-            {...register("content", { required: "Le contenu est obligatoire" })}
-            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-            rows={5}
-          />
+          <div className="flex items-center justify-between">
+            <label htmlFor="content" className="block text-sm font-medium text-gray-300">
+              Contenu (Markdown supporté)
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowPreview(!showPreview)}
+              className="px-3 py-1 text-sm text-purple-400 transition-colors rounded-md hover:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            >
+              {showPreview ? 'Éditer' : 'Aperçu'}
+            </button>
+          </div>
+          {showPreview ? (
+            <div className="p-3 prose prose-invert min-h-[200px] w-full rounded-lg bg-white/5 border-white/10 border">
+              <ReactMarkdown>{content || '*Aucun contenu*'}</ReactMarkdown>
+            </div>
+          ) : (
+            <textarea
+              id="content"
+              {...register("content", { required: "Le contenu est obligatoire" })}
+              className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50 min-h-[200px] font-mono"
+              placeholder="# Titre
+## Sous-titre
+- Liste à puces
+- Autre élément
+
+**Texte en gras** et *texte en italique*
+
+[Lien](https://exemple.com)"
+            />
+          )}
           {errors.content && <p className="text-red-500">{errors.content.message}</p>}
         </div>
         
