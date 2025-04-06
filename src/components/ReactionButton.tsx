@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
+import { SmilePlus } from "lucide-react";
 
 interface ReactionButtonProps {
   postId: number;
@@ -100,7 +101,7 @@ export const ReactionButton = ({ postId }: ReactionButtonProps) => {
         onClick={() => setShowReactions(!showReactions)}
         className="flex items-center mb-2 text-2xl text-gray-400 transition-colors hover:text-gray-300"
       >
-        😀
+        <SmilePlus />
         <span className="ml-2 text-sm">{getReactionCount("😀")}</span>
       </button>
 

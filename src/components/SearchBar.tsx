@@ -60,7 +60,7 @@ export const SearchBar = () => {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Rechercher des posts ou des communautés..."
+          placeholder="Rechercher des posts..."
           className="w-full px-4 py-2 pl-10 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
         />
         <svg

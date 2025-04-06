@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Post } from "./PostList";
+import { MessageCircleMore, ThumbsUp } from "lucide-react";
 
 interface Props {
   post: Post;
@@ -42,11 +43,11 @@ export const PostItem = ({ post }: Props) => {
           <div className="flex items-center justify-between mt-5">
             <div className="flex items-center space-x-3">
               <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
-                <span className="text-xl">👍</span>
+                <span className="text-xl"><ThumbsUp /></span>
                 <span className="text-sm font-medium">{post.like_count ?? 0}</span>
               </span>
               <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
-                <span className="text-xl">💬</span>
+                <span className="text-xl"><MessageCircleMore /></span>
                 <span className="text-sm font-medium">{post.comment_count ?? 0}</span>
               </span>
               {/* <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">

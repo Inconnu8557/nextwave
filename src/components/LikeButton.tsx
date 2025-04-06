@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
+
 
 interface Props {
   postId: number;
@@ -102,7 +104,7 @@ export const LikeButton = ({ postId }: Props) => {
           userVote === 1 ? "bg-green-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
-        👍 {likes}
+        <ThumbsUp /> {likes}
       </button>
       <button
         onClick={() => mutate(-1)}
@@ -110,7 +112,7 @@ export const LikeButton = ({ postId }: Props) => {
           userVote === -1 ? "bg-red-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
-        👎 {dislikes}
+        <ThumbsDown /> {dislikes}
       </button>
     </div>
   );
