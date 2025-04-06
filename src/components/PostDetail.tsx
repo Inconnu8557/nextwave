@@ -4,6 +4,7 @@ import { supabase } from "../supabase-client";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
 import { ReactionButton } from "./ReactionButton";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
   postId: number;
@@ -28,7 +29,7 @@ export const PostDetail = ({ postId }: Props) => {
   });
 
   if (isLoading) {
-    return (
+    return ( 
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center space-y-4 animate-pulse">
           <div className="w-12 h-12 rounded-full bg-purple-500/20"></div>
@@ -97,9 +98,7 @@ export const PostDetail = ({ postId }: Props) => {
 
         {/* Contenu du post */}
         <div className="prose prose-invert max-w-none">
-          <p className="text-lg leading-relaxed text-gray-300">
-            {post?.content}
-          </p>
+          <ReactMarkdown>{post?.content}</ReactMarkdown>
         </div>
 
         {/* Section des réactions */}

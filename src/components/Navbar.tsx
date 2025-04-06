@@ -28,7 +28,10 @@ export const Navbar = () => {
             to="/"
             className="text-xl font-extrabold text-white transition-all duration-300 hover:scale-105 hover:text-purple-400"
           >
-            Next<span className="text-transparent bg-gradient-to-r from-purple-500 to-purple-300 bg-clip-text">.Wave</span>
+            Next
+            <span className="text-transparent bg-gradient-to-r from-purple-500 to-purple-300 bg-clip-text">
+              .Wave
+            </span>
           </Link>
 
           {/* Search Bar - Visible sur Desktop */}
@@ -37,7 +40,7 @@ export const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="items-center hidden space-x-6 text-sm font-medium text-white md:flex">
+          <div className="items-center hidden space-x-6 text-sm font-medium text-white md:flex active:scale-95">
             <NavItem to="/" icon={<Home size={16} />} text="Home" />
             <NavItem
               to="/create"
@@ -146,7 +149,9 @@ const NavItem = ({
     to={to}
     className="flex items-center space-x-1.5 text-gray-300 transition-all duration-300 hover:text-white group px-2 py-1 rounded-md hover:bg-white/5"
   >
-    <span className="transition-transform duration-300 group-hover:scale-110">{icon}</span>
+    <span className="transition-transform duration-300 group-hover:scale-110">
+      {icon}
+    </span>
     <span className="transition-colors duration-300">{text}</span>
   </Link>
 );

@@ -13,29 +13,40 @@ interface PostInput {
   avatar_url: string | null;
   community_id?: number | null;
   image_url?: string | null;
-  link?: string | null;
+  user_id?: string;
 }
 
 const createPost = async (post: PostInput, imageFile: File) => {
-  const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
+  try {
+    const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from("post-images")
-    .upload(filePath, imageFile);
+    const { error: uploadError } = await supabase.storage
+      .from("post-images")
+      .upload(filePath, imageFile);
 
-  if (uploadError) throw new Error(uploadError.message);
+    if (uploadError) throw new Error(uploadError.message);
 
-  const { data: publicURLData } = supabase.storage
-    .from("post-images")
-    .getPublicUrl(filePath);
+    const { data: publicURLData } = supabase.storage
+      .from("post-images")
+      .getPublicUrl(filePath);
 
-  const { data, error } = await supabase
-    .from("posts")
-    .insert({ ...post, image_url: publicURLData.publicUrl });
+    const { data, error } = await supabase
+      .from("posts")
+      .insert([{
+        title: post.title,
+        content: post.content,
+        avatar_url: post.avatar_url,
+        community_id: post.community_id,
+        image_url: publicURLData.publicUrl,
+      }]);
 
-  if (error) throw new Error(error.message);
+    if (error) throw new Error(error.message);
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error('Error in createPost:', error);
+    throw error;
+  }
 };
 
 export const CreatePost = () => {
@@ -73,12 +84,13 @@ export const CreatePost = () => {
   });
 
   const onSubmit = async (data: PostInput) => {
-    if (!selectedFile) return;
+    if (!selectedFile || !user?.id) return;
     mutate({
       post: {
         ...data,
         avatar_url: user?.user_metadata.avatar_url || null,
         community_id: communityId,
+        user_id: user.id,
       },
       imageFile: selectedFile,
     });
@@ -246,22 +258,6 @@ export const CreatePost = () => {
           {errors.content && (
             <p className="text-red-500">{errors.content.message}</p>
           )}
-        </div>
-
-        <div className="space-y-2">
-          <label
-            htmlFor="link"
-            className="block text-sm font-medium text-gray-300"
-          >
-            Link(optional)
-          </label>
-          <input
-            type="url"
-            id="link"
-            {...register("link")}
-            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-          />
-          {errors.link && <p className="text-red-500">{errors.link.message}</p>}
         </div>
 
         <div className="space-y-2">
