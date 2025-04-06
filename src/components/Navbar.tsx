@@ -2,6 +2,7 @@ import { JSX, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Menu, X, User, LogOut, Settings, Home, Users, PlusSquare, ChevronDown } from "lucide-react";
+import { SearchBar } from "./SearchBar";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,6 +17,11 @@ export const Navbar = () => {
           <Link to="/" className="text-2xl font-extrabold text-white transition-transform hover:scale-105">
             Next<span className="text-purple-500">.Wave</span>
           </Link>
+
+          {/* Search Bar - Visible sur Desktop */}
+          <div className="hidden md:block md:w-1/3">
+            <SearchBar />
+          </div>
 
           {/* Desktop Navigation */}
           <div className="items-center hidden space-x-6 font-medium text-white md:flex">
@@ -46,6 +52,11 @@ export const Navbar = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="absolute left-0 w-full py-4 transition-all md:hidden top-16 bg-gray-900/90 backdrop-blur-md">
+          {/* Search Bar - Mobile */}
+          <div className="px-4 mb-4">
+            <SearchBar />
+          </div>
+
           <div className="flex flex-col items-center space-y-4 text-white">
             <NavItem to="/" icon={<Home size={20} />} text="Home" />
             <NavItem to="/create" icon={<PlusSquare size={20} />} text="Create Post" />
