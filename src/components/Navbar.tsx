@@ -26,7 +26,7 @@ export const Navbar = () => {
           </div>
 
           {/* User Section */}
-          <div className="items-center hidden space-x-4 md:flex">
+          <div className="items-center hidden space-x-6 md:flex">
             {user ? (
               <UserMenu displayName={displayName} avatar={user.user_metadata?.avatar_url} signOut={signOut} />
             ) : (

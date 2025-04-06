@@ -34,7 +34,7 @@ export const ProfilePage = () => {
 
   return (
     <div className="min-h-screen pt-20 text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
-      <div className='fixed inset-0 bg-[url("/grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
+      <div className='fixed inset-0 bg-[url("./grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
       <div className="relative z-10 max-w-3xl p-6 mx-auto border bg-white/5 backdrop-blur-sm border-white/10 rounded-xl">
         <h1 className="mb-6 text-3xl font-bold text-center text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">Mon Profil</h1>
         <div className="flex items-center space-x-6">

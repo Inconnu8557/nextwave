@@ -4,12 +4,15 @@ import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
 import { Community, fetchCommunities } from "./CommunityList";
 import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 
 interface PostInput {
   title: string;
   content: string;
   avatar_url: string | null;
   community_id?: number | null;
+  image_url?: string | null; // Add image_url to PostInput
+  link?: string | null;
 }
 
 const createPost = async (post: PostInput, imageFile: File) => {
@@ -35,13 +38,12 @@ const createPost = async (post: PostInput, imageFile: File) => {
 };
 
 export const CreatePost = () => {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [communityId, setCommunityId] = useState<number | null>(null);
+  const { register, handleSubmit, formState: { errors } } = useForm<PostInput>();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [communityId, setCommunityId] = useState<number | null>(null);
 
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -63,13 +65,11 @@ export const CreatePost = () => {
     },
   });
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const onSubmit = async (data: PostInput) => {
     if (!selectedFile) return;
     mutate({
       post: {
-        title,
-        content,
+        ...data,
         avatar_url: user?.user_metadata.avatar_url || null,
         community_id: communityId,
       },
@@ -161,7 +161,7 @@ export const CreatePost = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className={`max-w-2xl mx-auto space-y-6 bg-white/5 p-6 rounded-xl border border-white/10 backdrop-blur-sm transition-all duration-300 ${isSuccess ? 'opacity-50 pointer-events-none' : ''}`}>
+      <form onSubmit={handleSubmit(onSubmit)} className={`max-w-2xl mx-auto space-y-6 bg-white/5 p-6 rounded-xl border border-white/10 backdrop-blur-sm transition-all duration-300 ${isSuccess ? 'opacity-50 pointer-events-none' : ''}`}>
         <h2 className="mb-8 text-3xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">Créer un nouveau post</h2>
         
         <div className="space-y-2">
@@ -171,11 +171,16 @@ export const CreatePost = () => {
           <input
             type="text"
             id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            {...register("title", { 
+              required: "Le titre est obligatoire",
+              maxLength: {
+                value: 30,
+                message: "Le titre ne doit pas dépasser 30 caractères"
+              } 
+            })}
             className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-            required
           />
+          {errors.title && <p className="text-red-500">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">
@@ -184,16 +189,22 @@ export const CreatePost = () => {
           </label>
           <textarea
             id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            {...register("content", { required: "Le contenu est obligatoire" })}
             className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
             rows={5}
-            required
           />
+          {errors.content && <p className="text-red-500">{errors.content.message}</p>}
         </div>
+        
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300"></label>
-            <input type="link" className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+          <label htmlFor="link" className="block text-sm font-medium text-gray-300">Link(optional)</label>
+          <input 
+            type="url" 
+            id="link"
+            {...register("link")}
+            className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50" 
+          />
+          {errors.link && <p className="text-red-500">{errors.link.message}</p>}
         </div>
 
         <div className="space-y-2">
@@ -201,7 +212,8 @@ export const CreatePost = () => {
             Sélectionner une communauté
           </label>
           <select 
-            id="community" 
+            id="community"
+            {...register("community_id")}
             onChange={handleCommunityChange}
             className="w-full p-3 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
           >
