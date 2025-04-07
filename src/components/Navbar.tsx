@@ -10,7 +10,6 @@ import {
   Home,
   PenSquare,
   Users,
-  Compass,
   Menu,
   X
 } from "lucide-react";
@@ -33,7 +32,9 @@ export const Navbar = () => {
           {/* Navigation principale (cachée sur mobile) */}
           <div className="hidden md:flex items-center space-x-2">
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
-            <NavItem to="/explore" icon={<Compass size={18} />} text="Explorer" />
+            {user && (
+              <NavItem to="/create" icon={<PenSquare size={18} />} text="Créer un post" />
+            )}
             <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
           </div>
         </div>
@@ -109,7 +110,6 @@ export const Navbar = () => {
         <div className="md:hidden bg-black/20 backdrop-blur-lg border-t border-white/10">
           <div className="flex flex-col items-center space-y-2 py-4">
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
-            <NavItem to="/explore" icon={<Compass size={18} />} text="Explorer" />
             <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
             {user ? (
               <>
