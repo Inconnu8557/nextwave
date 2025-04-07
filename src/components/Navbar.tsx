@@ -45,12 +45,12 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Section droite: Actions utilisateur */}
-        <div className="flex items-center space-x-4">
+        {/* Section droite: Actions utilisateur (cachées sur mobile) */}
+        <div className="hidden md:flex items-center space-x-4">
           {user ? (
             <>
               {/* Boutons de création (cachés sur mobile) */}
-              <div className="hidden md:flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <Link
                   to="/create"
                   className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
@@ -111,7 +111,7 @@ export const Navbar = () => {
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
             <NavItem to="/explore" icon={<Compass size={18} />} text="Explorer" />
             <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
-            {user && (
+            {user ? (
               <>
                 <Link
                   to="/create"
@@ -127,7 +127,28 @@ export const Navbar = () => {
                   <Users size={18} className="mr-2" />
                   <span>Créer une communauté</span>
                 </Link>
+                <UserMenu 
+                  displayName={user.user_metadata?.username || user.email || 'User'} 
+                  avatar={user.user_metadata?.avatar_url} 
+                  signOut={signOut} 
+                  mobile={true}
+                />
               </>
+            ) : (
+              <div className="flex flex-col items-center space-y-2">
+                <Link
+                  to="/signin"
+                  className="px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+                >
+                  Connexion
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                >
+                  Inscription
+                </Link>
+              </div>
             )}
           </div>
         </div>
