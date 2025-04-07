@@ -21,7 +21,7 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-black/20 backdrop-blur-lg border-white/10">
+    <nav className="sticky top-0 z-50 border-b bg-black/20 backdrop-blur-lg border-white/10 max-w-screen-xl mx-auto">
       <div className="w-full flex items-center justify-between px-4 py-4">
         {/* Section gauche: Logo et navigation principale */}
         <div className="flex items-center space-x-6">
@@ -115,14 +115,14 @@ export const Navbar = () => {
               <>
                 <Link
                   to="/create"
-                  className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                  className="flex items-center px-2 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                 >
                   <PenSquare size={18} className="mr-2" />
                   <span>Créer un post</span>
                 </Link>
                 <Link
                   to="/community/create"
-                  className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+                  className="flex items-center px-2 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
                 >
                   <Users size={18} className="mr-2" />
                   <span>Créer une communauté</span>
