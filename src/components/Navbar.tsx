@@ -18,11 +18,11 @@ import { SearchBar } from "./SearchBar";
 
 export const Navbar = () => {
   const { user, signOut } = useAuth() as { user: SupabaseUser | null, signOut: () => void };
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-black/20 backdrop-blur-lg border-white/10">
-      <div className="container flex items-center justify-between px-4 py-4 mx-auto">
+      <div className="w-full flex items-center justify-between px-4 py-4">
         {/* Section gauche: Logo et navigation principale */}
         <div className="flex items-center space-x-6">
           {/* Logo */}
@@ -98,14 +98,14 @@ export const Navbar = () => {
 
         {/* Bouton menu mobile */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white">
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white">
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
       {/* Menu déroulant pour mobile */}
-      {menuOpen && (
+      {mobileMenuOpen && (
         <div className="md:hidden bg-black/20 backdrop-blur-lg border-t border-white/10">
           <div className="flex flex-col items-center space-y-2 py-4">
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
