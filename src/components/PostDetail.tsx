@@ -1,4 +1,3 @@
-import { useAuth } from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
