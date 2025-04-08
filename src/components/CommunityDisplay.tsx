@@ -3,7 +3,6 @@ import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
 import { PostItem } from "./PostItem";
 import { Link } from "react-router";
-import { ReactionButton } from "./ReactionButton";
 
 interface Props {
   communityId: number;
@@ -61,11 +60,10 @@ export const CommunityDisplay = ({ communityId }: Props) => {
       </div>
 
       {data && data.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-19 md:grid-cols-2 lg:grid-cols-3">
           {data.map((post, key) => (
             <div key={key}>
               <PostItem post={post} />
-              <ReactionButton postId={post.id} />
             </div>
           ))}
         </div>

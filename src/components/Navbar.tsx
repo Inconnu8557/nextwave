@@ -20,8 +20,8 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-black/20 backdrop-blur-lg border-white/10 max-w-screen-xl mx-auto">
-      <div className="w-full flex items-center justify-between px-4 py-4">
+    <nav className="sticky top-0 z-50 max-w-screen-xl mx-auto border-b bg-black/20 backdrop-blur-lg border-white/10">
+      <div className="flex items-center justify-between w-full px-4 py-4">
         {/* Section gauche: Logo et navigation principale */}
         <div className="flex items-center space-x-6">
           {/* Logo */}
@@ -30,11 +30,8 @@ export const Navbar = () => {
           </Link>
           
           {/* Navigation principale (cachée sur mobile) */}
-          <div className="hidden md:flex items-center space-x-2">
+          <div className="items-center hidden space-x-2 md:flex">
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
-            {user && (
-              <NavItem to="/create" icon={<PenSquare size={18} />} text="Créer un post" />
-            )}
             <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
           </div>
         </div>
@@ -47,7 +44,7 @@ export const Navbar = () => {
         </div>
 
         {/* Section droite: Actions utilisateur (cachées sur mobile) */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="items-center hidden space-x-4 md:flex">
           {user ? (
             <>
               {/* Boutons de création (cachés sur mobile) */}
@@ -107,8 +104,8 @@ export const Navbar = () => {
 
       {/* Menu déroulant pour mobile */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-black/20 backdrop-blur-lg border-t border-white/10">
-          <div className="flex flex-col items-center space-y-2 py-4">
+        <div className="border-t md:hidden bg-black/20 backdrop-blur-lg border-white/10">
+          <div className="flex flex-col items-center py-4 space-y-2">
             <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
             <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
             {user ? (

@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
 import { MessageCirclePlus } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
   postId: number;
@@ -120,13 +121,16 @@ export const CommentSection = ({ postId }: Props) => {
       {/* Create Comment Section */}
       {user ? (
         <form onSubmit={handleSubmit} className="mb-4">
+          <ReactMarkdown>{newCommentText || "*Aucun contenu*"}</ReactMarkdown>
           <textarea
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
             className="w-full p-2 bg-transparent border rounded border-white/10"
             placeholder="Write a comment..."
             rows={3}
+            id="comment"
           />
+          
           <button
             type="submit"
             className="flex items-center gap-2 px-4 py-3 mt-2 font-medium text-white transition-colors bg-purple-600 rounded-lg hover:bg-purple-700"
