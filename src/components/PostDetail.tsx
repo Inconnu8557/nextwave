@@ -5,6 +5,8 @@ import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
 import { ReactionButton } from "./ReactionButton";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "../context/AuthContext"; // Add this import
+
 
 interface Props {
   postId: number;
@@ -23,8 +25,7 @@ const fetchPostById = async (id: number): Promise<Post> => {
 };
 
 export const PostDetail = ({ postId }: Props) => {
-  const { user } = useAuth();
-  const displayName = user?.user_metadata.user_name || user?.email;
+  useAuth();
   const { data: post, error, isLoading } = useQuery<Post, Error>({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
