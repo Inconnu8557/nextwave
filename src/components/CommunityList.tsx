@@ -8,6 +8,7 @@ export interface Community {
   description: string;
   created_at: string;
 }
+// eslint-disable-next-line react-refresh/only-export-components
 export const fetchCommunities = async (): Promise<Community[]> => {
   const { data, error } = await supabase
     .from("communities")
@@ -31,25 +32,27 @@ export const CommunityList = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+      <h2 className="mb-8 text-4xl font-bold text-center text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
         Communautés
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {data?.map((community) => (
           <div
             key={community.id}
-            className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300"
+            className="relative p-6 transition-all duration-300 border border-gray-700 group bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl hover:scale-105 hover:shadow-xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl group-hover:opacity-100"></div>
             <Link
               to={`/community/${community.id}`}
               className="relative z-10"
             >
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-purple-300 group-hover:to-pink-300 transition-all duration-300">
+              <h3 className="text-2xl font-bold text-transparent transition-all duration-300 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text group-hover:from-purple-300 group-hover:to-pink-300">
                 {community.name}
               </h3>
-              <p className="text-gray-400 mt-3 line-clamp-3">{community.description}</p>
-              <div className="flex items-center space-x-4 mt-4 text-sm text-gray-500">
+              <p className="mt-3 text-gray-400 line-clamp-3">
+                {community.description}
+              </p>
+              <div className="flex items-center mt-4 space-x-4 text-sm text-gray-500">
                 <span className="flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

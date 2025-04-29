@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
-import { LikeButton } from "./LikeButton";
-import { CommentSection } from "./CommentSection";
-import { ReactionButton } from "./ReactionButton";
 import ReactMarkdown from "react-markdown";
-import { useAuth } from "../context/AuthContext"; // Add this import
+import { useAuth } from "../context/AuthContext";
+import { LikeButton } from "./LikeButton";
+import { ReactionButton } from "./ReactionButton";
+import { CommentSection } from "./CommentSection";
+import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
 
+import { Post } from "./PostList";
 
 interface Props {
   postId: number;
@@ -15,13 +17,12 @@ interface Props {
 const fetchPostById = async (id: number): Promise<Post> => {
   const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, profiles (avatar_url)")
     .eq("id", id)
     .single();
 
   if (error) throw new Error(error.message);
-
-  return data as Post;
+  return { ...data, avatar_url: data.profiles.avatar_url } as Post;
 };
 
 export const PostDetail = ({ postId }: Props) => {
@@ -29,95 +30,141 @@ export const PostDetail = ({ postId }: Props) => {
   const { data: post, error, isLoading } = useQuery<Post, Error>({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
+    staleTime: 1000 * 60 * 10,
   });
 
-
   if (isLoading) {
-    return ( 
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex flex-col items-center space-y-4 animate-pulse">
-          <div className="w-12 h-12 rounded-full bg-purple-500/20"></div>
-          <div className="text-purple-500">Chargement du post...</div>
-        </div>
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <motion.div
+          className="flex flex-col items-center space-y-3"
+          initial={{ opacity: 0.5, scale: 0.8 }}
+          animate={{ opacity: [0.5, 1, 0.5], scale: [0.8, 1.2, 0.8] }}
+          transition={{ duration: 1.2, loop: Infinity }}
+        >
+          <div className="rounded-full w-14 h-14 bg-violet-600/20" />
+          <motion.span
+            className="text-lg font-medium text-violet-600"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 0.8, loop: Infinity }}
+          >
+            Chargement du post...
+          </motion.span>
+        </motion.div>
       </div>
     );
   }
 
-  if (error) {
+  if (error || !post) {
     return (
-      <div className="flex items-center justify-center min-h-[400px] text-red-500">
-        <div className="text-center">
-          <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>Erreur : {error.message}</div>
+      <motion.div
+        className="flex items-center justify-center min-h-[60vh]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="space-y-4 text-center">
+          <ArrowLeft className="w-12 h-12 mx-auto text-red-500" />
+          <p className="font-semibold text-red-500">Erreur : {error?.message}</p>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* En-tête du post */}
-      <div className="p-8 mb-8 border bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl">
-        <div className="flex items-center mb-6 space-x-4">
-          {post?.avatar_url ? (
+    <motion.div
+      className="max-w-3xl p-6 mx-auto space-y-8 shadow-xl lg:p-10 bg-gradient-to-br from-violet-700 to-violet-500 backdrop-blur-md rounded-3xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Back Button */}
+      <motion.button
+        onClick={() => window.history.back()}
+        className="flex items-center space-x-2 text-sm text-gray-100 hover:text-white"
+        whileHover={{ x: -5 }}
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span>Retour</span>
+      </motion.button>
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+        <motion.div whileHover={{ rotate: 360 }} className="shrink-0">
+          {post.avatar_url ? (
             <img
               src={post.avatar_url}
               alt="Avatar"
-              className="object-cover rounded-full w-14 h-14 ring-2 ring-purple-500/50"
+              className="w-16 h-16 rounded-full ring-4 ring-violet-400"
             />
           ) : (
-            <div className="rounded-full w-14 h-14 bg-gradient-to-tl from-purple-600 to-pink-600" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-500 to-violet-300" />
           )}
-          <div>
-            <h1 className="mb-2 text-4xl font-bold text-transparent bg-gradient-to-r from-white to-gray-300 bg-clip-text">
-              {post?.title}
-            </h1>
-            <div className="flex items-center space-x-4 text-sm text-gray-400">
-              <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {new Date(post!.created_at).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
-                })}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Image du post */}
-        {post?.image_url && (
-          <div className="relative mb-6 overflow-hidden aspect-video rounded-xl bg-black/20">
-            <img
-              src={post.image_url}
-              alt={post?.title}
-              className="absolute inset-0 object-contain w-full h-full"
-            />
-          </div>
-        )}
-
-        {/* Contenu du post */}
-        <div className="prose prose-invert max-w-none">
-          <ReactMarkdown>{post?.content}</ReactMarkdown>
-        </div>
-
-        {/* Section des réactions */}
-        <div className="pt-6 mt-8 border-t border-white/10">
-          <div className="flex items-center space-x-6">
-            <LikeButton postId={postId} />
-            <ReactionButton postId={postId} />
-          </div>
+        </motion.div>
+        <div className="mt-4 sm:mt-0">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-600">
+            {post.title}
+          </h1>
+          <p className="mt-1 text-sm text-gray-200">
+            Publié le {new Date(post.created_at).toLocaleDateString('fr-FR', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}
+          </p>
         </div>
       </div>
 
-      {/* Section des commentaires */}
-      <div className="p-8 border bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl">
-        <CommentSection postId={postId}/>
-      </div>
-    </div>
+      {/* Image */}
+      {post.image_url && (
+        <motion.div
+          className="relative w-full overflow-hidden shadow-inner rounded-2xl"
+          initial={{ scale: 1.2 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <img
+            src={post.image_url}
+            alt={post.title}
+            className="object-cover w-full h-64 sm:h-96"
+          />
+        </motion.div>
+      )}
+
+      {/* Content */}
+      <motion.section
+        className="prose prose-lg prose-white max-w-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+      >
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </motion.section>
+
+      {/* Actions */}
+      <motion.div
+        className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-violet-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
+        <div className="flex items-center space-x-4">
+          <LikeButton postId={postId} />
+          <ReactionButton postId={postId} />
+        </div>
+        <span className="text-sm text-gray-200">
+          {post.comment_count ?? 0} commentaire{post.comment_count! > 1 ? 's' : ''}
+        </span>
+      </motion.div>
+
+      {/* Comments */}
+      <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+      >
+        <CommentSection postId={postId} />
+      </motion.section>
+    </motion.div>
   );
 };
