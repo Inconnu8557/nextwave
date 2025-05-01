@@ -1,12 +1,14 @@
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Pencil } from "lucide-react";
+import { Pencil, Save, X } from "lucide-react";
 
 export const ProfilePage = () => {
   const { user, updateUser } = useAuth();
-  const [newDisplayName, setNewDisplayName] = useState(user?.user_metadata.user_name || user?.email || "");
-  const [isEditing, setIsEditing] = useState(false); // New state for edit mode
+  const [newDisplayName, setNewDisplayName] = useState(
+    user?.user_metadata.user_name || user?.email || ""
+  );
+  const [isEditing, setIsEditing] = useState(false);
   const displayName = user?.user_metadata.user_name || user?.email;
   const avatar = user?.user_metadata.avatar_url;
 
@@ -15,7 +17,7 @@ export const ProfilePage = () => {
 
     try {
       await updateUser(newDisplayName);
-      setIsEditing(false); // Exit edit mode after successful update
+      setIsEditing(false);
       alert("Username updated successfully!");
     } catch (error) {
       console.error("Error updating username:", error);
@@ -24,77 +26,93 @@ export const ProfilePage = () => {
   };
 
   const handleEditClick = () => {
-    setIsEditing(true); // Enter edit mode
+    setIsEditing(true);
   };
 
   const handleCancelClick = () => {
-    setIsEditing(false); // Cancel edit mode
-    setNewDisplayName(user?.user_metadata.user_name || user?.email || ""); // Reset to original value
+    setIsEditing(false);
+    setNewDisplayName(user?.user_metadata.user_name || user?.email || "");
   };
 
   return (
-    <div className="min-h-screen pt-20 text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
-      <div className='fixed inset-0 bg-[url("./grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
-      <div className="relative z-10 max-w-3xl p-6 mx-auto border bg-white/5 backdrop-blur-sm border-white/10 rounded-xl">
-        <h1 className="mb-6 text-3xl font-bold text-center text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">Mon Profil</h1>
+    <div className="min-h-screen pt-20 text-gray-100 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+      <div className="relative max-w-4xl p-8 mx-auto bg-gray-800 rounded-lg shadow-lg">
         <div className="flex items-center space-x-6">
           {avatar ? (
             <img
               src={avatar}
               alt="Avatar"
-              className="w-24 h-24 border border-gray-300 rounded-full"
+              className="border-4 border-purple-500 rounded-full shadow-md w-28 h-28"
             />
           ) : (
-            <div className="flex items-center justify-center w-24 h-24 bg-gray-200 border border-gray-300 rounded-full">
-              <span className="text-2xl text-gray-500">
+            <div className="flex items-center justify-center bg-gray-700 border-4 border-purple-500 rounded-full shadow-md w-28 h-28">
+              <span className="text-3xl font-bold text-gray-300">
                 {displayName ? displayName.charAt(0).toUpperCase() : "U"}
               </span>
             </div>
           )}
           <div>
-            <h2 className="text-2xl font-bold text-gray-100">{displayName}</h2>
+            <h2 className="text-3xl font-bold text-purple-400">
+              {displayName}
+            </h2>
             <p className="text-gray-400">{user?.email}</p>
           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold text-gray-300">Informations du profil</h3>
-          <div className="mt-2 space-y-2">
-            <p className="text-gray-400">
+        <div className="p-6 mt-8 bg-gray-700 rounded-lg shadow-inner">
+          <h3 className="text-xl font-semibold text-purple-300">
+            Informations du profil
+          </h3>
+          <div className="mt-4 space-y-4">
+            <div className="flex items-center justify-between">
               <span className="font-medium text-gray-300">Username :</span>
               {isEditing ? (
-                <>
+                <div className="flex items-center space-x-2">
                   <input
                     type="text"
                     value={newDisplayName}
                     onChange={(e) => setNewDisplayName(e.target.value)}
-                    className="px-2 py-1 ml-2 text-white bg-gray-700 rounded"
+                    className="px-3 py-1 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
-                  <button onClick={updateUsername} className="px-2 py-1 ml-2 text-white bg-blue-600 rounded">
+                  <button
+                    onClick={updateUsername}
+                    className="flex items-center px-3 py-1 text-white bg-green-600 rounded-lg hover:bg-green-700"
+                  >
+                    <Save className="w-4 h-4 mr-1" />
                     Save
                   </button>
-                  <button onClick={handleCancelClick} className="px-2 py-1 ml-2 text-white bg-gray-500 rounded">
+                  <button
+                    onClick={handleCancelClick}
+                    className="flex items-center px-3 py-1 text-white bg-red-600 rounded-lg hover:bg-red-700"
+                  >
+                    <X className="w-4 h-4 mr-1" />
                     Cancel
                   </button>
-                </>
+                </div>
               ) : (
-                <>
-                  {displayName}
-                  <button onClick={handleEditClick} className="ml-2 text-gray-400 hover:text-gray-300">
-                    <span className="sr-only">Edit</span>
-                    <Pencil className="hover:text-gray-500"/>
+                <div className="flex items-center justify-end space-x-2">
+                  <span>{displayName}</span>
+                  <button
+                  onClick={handleEditClick}
+                  className="text-gray-400 hover:text-purple-400"
+                  >
+                  <Pencil className="w-5 h-5" />
                   </button>
-                </>
+                </div>
               )}
-            </p>
-            <p className="text-gray-400">
-              <span className="font-medium text-gray-300">Email :</span> {user?.email}
-            </p>
+            </div>
+            <div>
+              <span className="font-medium text-gray-300">Email :</span>{" "}
+              {user?.email}
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-between mt-6">
-          <Link to="/settings" className="px-4 py-2 transition bg-gray-600 rounded-lg hover:bg-gray-700">
+        <div className="flex justify-end mt-6">
+          <Link
+            to="/settings"
+            className="px-6 py-2 text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700"
+          >
             Paramètres
           </Link>
         </div>
