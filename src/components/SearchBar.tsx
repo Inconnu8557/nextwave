@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../supabase-client';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import debounce from 'lodash.debounce'; // npm install lodash.debounce
 
 interface SearchResult {
   id: number;
@@ -12,55 +14,89 @@ interface SearchResult {
 
 export const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
+  // Debounce input value
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedQuery(searchQuery.trim());
+    }, 300);
+    handler();
+    return () => handler.cancel();
+  }, [searchQuery]);
+
+  // Detect clicks outside and ESC key
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsFocused(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  // Fetch data from Supabase
   const { data: searchResults, isLoading } = useQuery<SearchResult[]>({
-    queryKey: ['search', searchQuery],
+    queryKey: ['search', debouncedQuery],
     queryFn: async () => {
-      if (!searchQuery) return [];
+      if (!debouncedQuery) return [];
 
-      // Rechercher dans les posts
-      const { data: postsData, error: postsError } = await supabase
-        .from('posts')
-        .select('id, title')
-        .textSearch('title', searchQuery)
-        .limit(5);
+      const [posts, communities] = await Promise.all([
+        supabase
+          .from('posts')
+          .select('id, title')
+          .ilike('title', `%${debouncedQuery}%`)
+          .limit(5),
+        supabase
+          .from('communities')
+          .select('id, name')
+          .ilike('name', `%${debouncedQuery}%`)
+          .limit(5),
+      ]);
 
-      // Rechercher dans les communautés
-      const { data: communitiesData, error: communitiesError } = await supabase
-        .from('communities')
-        .select('id, name')
-        .textSearch('name', searchQuery)
-        .limit(5);
-
-      if (postsError || communitiesError) {
-        console.error('Erreur de recherche:', postsError || communitiesError);
+      if (posts.error || communities.error) {
+        console.error('Erreur:', posts.error || communities.error);
         return [];
       }
 
-      // Combiner et formater les résultats
-      const formattedPosts = (postsData || []).map(post => ({
+      const formattedPosts = (posts.data || []).map(post => ({
         ...post,
-        type: 'post' as const
+        type: 'post' as const,
       }));
 
-      const formattedCommunities = (communitiesData || []).map(community => ({
-        ...community,
-        type: 'community' as const
+      const formattedCommunities = (communities.data || []).map(comm => ({
+        ...comm,
+        type: 'community' as const,
       }));
 
       return [...formattedPosts, ...formattedCommunities];
     },
-    enabled: searchQuery.length > 2,
+    enabled: debouncedQuery.length > 2,
+    staleTime: 60 * 1000,
   });
 
   return (
-    <div className="relative">
+    <div ref={wrapperRef} className="relative">
+      {/* Input de recherche */}
       <div className="relative">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Rechercher des posts..."
+          onFocus={() => setIsFocused(true)}
+          placeholder="Rechercher des posts ou communautés..."
           className="w-full px-4 py-2 pl-10 text-gray-200 transition-all border rounded-lg bg-white/5 border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
         />
         <svg
@@ -79,20 +115,27 @@ export const SearchBar = () => {
       </div>
 
       {/* Résultats de recherche */}
-      {searchQuery.length > 2 && (
+      {debouncedQuery.length > 2 && isFocused && (
         <div className="absolute z-50 w-full mt-2 overflow-hidden bg-gray-800 border rounded-lg shadow-xl border-white/10">
           {isLoading ? (
-            <div className="p-4 text-gray-400">Recherche en cours...</div>
+            <div className="flex items-center justify-center p-4 text-gray-400">
+              <motion.div
+                className="w-6 h-6 border-4 border-purple-500 rounded-full border-t-transparent"
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, ease: 'linear', duration: 1 }}
+              />
+              <span className="ml-3">Recherche en cours...</span>
+            </div>
           ) : searchResults && searchResults.length > 0 ? (
-            <div className="py-2">
+            <div className="py-2 overflow-y-auto max-h-60">
               {searchResults.map((result) => (
                 <Link
                   key={`${result.type}-${result.id}`}
                   to={result.type === 'post' ? `/post/${result.id}` : `/community/${result.id}`}
-                  className="flex items-center px-4 py-3 transition-colors hover:bg-gray-700"
+                  className="flex items-start px-4 py-3 transition-colors hover:bg-gray-700"
                 >
                   <div className="flex-1">
-                    <div className="text-gray-200">
+                    <div className="font-medium text-gray-200 truncate">
                       {result.type === 'post' ? result.title : result.name}
                     </div>
                     <div className="text-sm text-gray-400">
@@ -110,3 +153,4 @@ export const SearchBar = () => {
     </div>
   );
 };
+  
