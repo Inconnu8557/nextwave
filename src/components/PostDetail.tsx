@@ -5,8 +5,8 @@ import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
 import { ReactionButton } from "./ReactionButton";
 import ReactMarkdown from "react-markdown";
-import { useAuth } from "../context/AuthContext"; // Add this import
-
+import { useAuth } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 interface Props {
   postId: number;
@@ -26,14 +26,17 @@ const fetchPostById = async (id: number): Promise<Post> => {
 
 export const PostDetail = ({ postId }: Props) => {
   useAuth();
-  const { data: post, error, isLoading } = useQuery<Post, Error>({
+  const {
+    data: post,
+    error,
+    isLoading,
+  } = useQuery<Post, Error>({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
   });
 
-
   if (isLoading) {
-    return ( 
+    return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center space-y-4 animate-pulse">
           <div className="w-12 h-12 rounded-full bg-purple-500/20"></div>
@@ -47,8 +50,18 @@ export const PostDetail = ({ postId }: Props) => {
     return (
       <div className="flex items-center justify-center min-h-[400px] text-red-500">
         <div className="text-center">
-          <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-12 h-12 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <div>Erreur : {error.message}</div>
         </div>
@@ -62,7 +75,8 @@ export const PostDetail = ({ postId }: Props) => {
       <div className="p-8 mb-8 border bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl">
         <div className="flex items-center mb-6 space-x-4">
           {post?.avatar_url ? (
-            <img
+            <motion.img
+              animate={{ rotate: 360 }}
               src={post.avatar_url}
               alt="Avatar"
               className="object-cover rounded-full w-14 h-14 ring-2 ring-purple-500/50"
@@ -76,13 +90,23 @@ export const PostDetail = ({ postId }: Props) => {
             </h1>
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                {new Date(post!.created_at).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
+                {new Date(post!.created_at).toLocaleDateString("fr-FR", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
                 })}
               </span>
             </div>
@@ -91,13 +115,19 @@ export const PostDetail = ({ postId }: Props) => {
 
         {/* Image du post */}
         {post?.image_url && (
-          <div className="relative mb-6 overflow-hidden aspect-video rounded-xl bg-black/20">
+          <motion.div
+            className="relative mb-6 overflow-hidden aspect-video rounded-xl bg-black/20"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <img
               src={post.image_url}
               alt={post?.title}
               className="absolute inset-0 object-contain w-full h-full"
             />
-          </div>
+          </motion.div>
         )}
 
         {/* Contenu du post */}
@@ -116,7 +146,7 @@ export const PostDetail = ({ postId }: Props) => {
 
       {/* Section des commentaires */}
       <div className="p-8 border bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl">
-        <CommentSection postId={postId}/>
+        <CommentSection postId={postId} />
       </div>
     </div>
   );
