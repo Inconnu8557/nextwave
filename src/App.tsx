@@ -9,6 +9,7 @@ import { CommunityPage } from "./pages/CommunityPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SignUpForm } from "./components/SignUpForm";
 import { SignInForm } from "./components/SignInForm";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/communities" element={<CommunitiesPage />} />
           <Route path="/community/:id" element={<CommunityPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
       </div>
     </div>
