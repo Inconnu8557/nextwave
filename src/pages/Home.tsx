@@ -14,10 +14,6 @@ export const Home = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  <script
-    src="//code.tidio.co/z0mrfrbm9byoa4dnl7mrpm6ov1j18a1c.js"
-    async
-  ></script>;
   return (
     <div className="pt-10">
       {loading ? (
