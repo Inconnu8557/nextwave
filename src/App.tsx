@@ -50,6 +50,9 @@ function App() {
             <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
+        <span className="block p-4 text-sm text-center text-gray-400 absolute bottom-0 left-0 w-full bg-black/20 backdrop-blur-lg border-t border-white/10">
+          Ce site est actuellement en développement et peut contenir des erreurs. Merci de votre compréhension.
+        </span>
       </div>
     </div>
   );
