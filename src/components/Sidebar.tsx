@@ -11,6 +11,7 @@ import {
   Users,
   Menu,
   X,
+  MessageCircleMore,
 } from "lucide-react";
 
 export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; toggleSidebar: () => void }) => {
@@ -45,6 +46,7 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
         {/* Navigation principale */}
         <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
         <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
+        <NavItem to="/chat" icon={<MessageCircleMore size={18} />} text="Chat" />
 
         {user && (
           <>
@@ -62,6 +64,13 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
             >
               <Users size={18} className="mr-2" />
               <span>Créer une communauté</span>
+            </Link>
+            <Link
+              to="/chat/create"
+              className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+            >
+              <MessageCircleMore size={18} className="mr-2" />
+              <span>Créer un chat</span>
             </Link>
           </>
         )}

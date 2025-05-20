@@ -9,10 +9,6 @@ export const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 max-w-screen-xl mx-auto border-b bg-black/20 backdrop-blur-lg border-white/10">
       <div className="flex items-center justify-between w-full px-4 py-4">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
-          NextWave
-        </Link>
 
         {/* SearchBar */}
         <div className="flex-1 w-full px-8 mx-4">
