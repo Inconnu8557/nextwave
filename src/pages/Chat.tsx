@@ -1,115 +1,42 @@
-import  { useState } from 'react';
+import React, { useState } from 'react';
 
-const Chat = () => {
-  const [messages, setMessages] = useState<{ content: string; isUser: boolean }[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
+const Chat: React.FC = () => {
+  const [messages, setMessages] = useState<string[]>([]);
+  const [input, setInput] = useState('');
 
-  const addMessage = (msg: string, isUser: boolean) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { content: msg, isUser },
-    ]);
-  };
+  const sendMessage = async () => {
+    if (!input.trim()) return;
 
-  const sendMessage = () => {
-    if (inputMessage.trim()) {
-      addMessage(inputMessage, true);
-      setInputMessage('');
+    setMessages(prev => [...prev, `Vous : ${input}`]);
 
-      // Simulate AI response (replace with actual API call)
-      setTimeout(() => {
-        const aiResponse = "This is an AI response.";
-        addMessage(aiResponse, false);
-      }, 1000);
+    try {
+      const response = await puter.ai.chat(input);
+      setMessages(prev => [...prev, `IA : ${response.message.content}`]);
+    } catch (error) {
+      console.error('Erreur lors de la communication avec l\'IA:', error);
+      setMessages(prev => [...prev, 'Erreur : Impossible d\'obtenir une réponse de l\'IA.']);
     }
+
+    setInput('');
   };
 
   return (
-    <div style={styles.chatContainer}>
-      <div style={styles.messages} id="messages">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            style={{
-              ...styles.message,
-              ...(msg.isUser ? styles.userMessage : {}),
-            }}
-          >
-            {msg.content}
-          </div>
+    <div className='mt-20'>
+      <div className='mb-4 p-4 border border-gray-300 rounded-lg h-96 overflow-y-auto'>
+        {messages.map((msg, idx) => (
+          <p key={idx}>{msg}</p>
         ))}
       </div>
-      <div style={styles.chatInput}>
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type a message..."
-          style={styles.input}
-        />
-        <button onClick={sendMessage} style={styles.button}>
-          Send
-        </button>
-      </div>
+      <input 
+        className='w-full p-2 border border-gray-300 rounded'
+        type="text"
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        placeholder="Tapez votre message..."
+      />
+      <button className="flex items-center gap-2 px-4 py-3 mt-2 font-medium text-white transition-colors bg-purple-600 rounded-lg hover:bg-purple-700" onClick={sendMessage}>Envoyer </button>
     </div>
   );
-};
-
-const styles = {
-  chatContainer: {
-    width: '80%',
-    maxWidth: '600px',
-    margin: 'auto',
-    backgroundColor: 'white', // Fond blanc
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    padding: '20px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    height: '100vh',
-    justifyContent: 'center',
-  },
-  messages: {
-    height: '300px',
-    overflowY: 'auto' as const,
-    borderBottom: '1px solid #ddd',
-    marginBottom: '20px',
-    padding: '10px',
-    backgroundColor: '#f9f9f9', // Ajout d'un fond clair pour les messages
-  },
-  message: {
-    padding: '5px',
-    margin: '5px 0',
-    borderRadius: '4px',
-    backgroundColor: '#2c7aef', // Fond bleu
-    color: 'white', // Texte blanc
-  },
-  userMessage: {
-    textAlign: 'right' as const,
-    backgroundColor: '#e0f7fa', // Fond bleu clair
-    color: 'black', // Texte noir pour contraste
-  },
-  chatInput: {
-    display: 'flex',
-  },
-  input: {
-    flexGrow: 1,
-    padding: '10px',
-    marginRight: '10px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    color: 'black', // Texte noir
-    backgroundColor: 'white', // Fond blanc
-  },
-  button: {
-    padding: '10px 20px',
-    backgroundColor: '#007bff',
-    color: 'white', // Texte blanc
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
 };
 
 export default Chat;
