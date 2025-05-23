@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./components/NeonCursor.css";
 
 @layer utilities {
   @keyframes blink {
@@ -71,4 +72,4 @@ body {
 .button:hover {
   transform: scale(1.05); /* Effet de zoom au survol */
   transition: transform 0.3s ease; /* Transition douce */
-} 
+}

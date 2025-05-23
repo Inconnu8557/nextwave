@@ -1,0 +1,42 @@
+.neon-cursor-container {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+}
+
+.cursor-main {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fffbe6;
+  box-shadow: 0 0 8px 2px #ffb347, 0 0 20px 8px #ffb34744;
+  border: 2px solid rgb(236, 101, 23);
+  mix-blend-mode: lighten;
+}
+
+.cursor-trail {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgb(236, 101, 23);
+  box-shadow: 0 0 16px 4px #ffb34788;
+  opacity: 0.7;
+  mix-blend-mode: lighten;
+}
+
+.cursor-glow {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffb34755 0%, #ffb34700 80%);
+  opacity: 0.4;
+  filter: blur(4px);
+  pointer-events: none;
+}

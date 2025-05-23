@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Route, Routes } from "react-router";
 import { Home } from "./pages/Home";
 import { Navbar } from "./components/Navbar";
@@ -23,6 +22,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import IconHome from "./assets/icons/Home.json";
+import NeonCursor from "./components/NeonCursor";
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -46,6 +46,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
+      <NeonCursor />
       <div className='fixed inset-0 bg-[url("/grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
 
       {!isSidebarVisible && (
@@ -77,9 +78,6 @@ function App() {
             <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
-        <span className="absolute bottom-0 left-0 block w-full p-4 text-sm text-center text-gray-400 border-t bg-black/20 backdrop-blur-lg border-white/10">
-          Ce site est actuellement en développement et peut contenir des erreurs. Merci de votre compréhension.
-        </span>
       </div>
 
       {/* Barre d'icônes mobile en bas */}
@@ -107,6 +105,7 @@ function App() {
           <UserIcon size={24} />
         </Link>
       </nav>
+      {/* <canvas id="canvas" style={{position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: 10000}} /> */}
     </div>
   );
 }

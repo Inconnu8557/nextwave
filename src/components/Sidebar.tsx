@@ -28,7 +28,7 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
       {/* Bouton de bascule */}
       <button
         onClick={toggleSidebar}
-        className="absolute top-4 right-4 p-2 text-white bg-black/50 rounded-full hover:bg-black/70"
+        className="absolute p-2 text-white rounded-full top-4 right-4 bg-black/50 hover:bg-black/70"
       >
         {isVisible ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -37,7 +37,7 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
       <div className="p-4">
         <Link
           to="/"
-          className="text-2xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text ml-8"
+          className="ml-8 text-2xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text z-999"
         >
           NextWave
         </Link>
@@ -104,7 +104,7 @@ const UserMenu = ({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative flex items-center space-x-3">
+    <div className="relative flex items-center space-x-3 z-999">
       {avatar && (
         <img
           src={avatar}
@@ -121,7 +121,7 @@ const UserMenu = ({
       </button>
 
       {menuOpen && (
-        <div className="absolute top-full mt-2 left-0 bg-gray-800 shadow-lg rounded-lg overflow-hidden w-48">
+        <div className="absolute left-0 w-48 mt-2 overflow-hidden bg-gray-800 rounded-lg shadow-lg top-full">
           <Link
             to="/profile"
             className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700"

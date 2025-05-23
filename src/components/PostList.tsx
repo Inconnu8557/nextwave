@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { PostItem } from "./PostItem";
-import { data } from "react-router";
+// import { data } from "react-router";
 import { motion } from "framer-motion";
 
 export interface Post {
@@ -24,7 +24,7 @@ const fetchPosts = async (): Promise<Post[]> => {
   return data as Post[];
 };
 
-console.log(data);
+// console.log(data);
 
 export const PostList = () => {
   const { data, error, isLoading } = useQuery<Post[], Error>({
@@ -39,7 +39,7 @@ export const PostList = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="flex flex-wrap justify-center gap-6">

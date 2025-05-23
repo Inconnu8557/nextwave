@@ -7,7 +7,7 @@ export const Navbar = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <nav className="sticky top-0 z-50 max-w-screen-xl mx-auto border-b bg-black/20 backdrop-blur-lg border-white/10">
+    <nav className="sticky top-0 z-20 max-w-screen-xl mx-auto border-b bg-black/20 backdrop-blur-lg border-white/10">
       <div className="flex items-center justify-between w-full px-4 py-4">
 
         {/* SearchBar */}

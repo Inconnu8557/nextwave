@@ -22,7 +22,7 @@ const Chat: React.FC = () => {
 
   return (
     <div className='mt-20'>
-      <div className='mb-4 p-4 border border-gray-300 rounded-lg h-96 overflow-y-auto'>
+      <div className='p-4 mb-4 overflow-y-auto border border-gray-300 rounded-lg h-96'>
         {messages.map((msg, idx) => (
           <p key={idx}>{msg}</p>
         ))}
