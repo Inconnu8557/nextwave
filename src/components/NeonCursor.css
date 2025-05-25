@@ -14,8 +14,8 @@
   height: 20px;
   border-radius: 50%;
   background: #fffbe6;
-  box-shadow: 0 0 8px 2px #ffb347, 0 0 20px 8px #ffb34744;
-  border: 2px solid rgb(236, 101, 23);
+  box-shadow: 0 0 8px 2px #ff33ff, 0 0 20px 8px #7a028d44;
+  border: 2px solid rgb(138, 43, 226)	;
   mix-blend-mode: lighten;
 }
 
@@ -24,8 +24,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid rgb(236, 101, 23);
-  box-shadow: 0 0 16px 4px #ffb34788;
+  border: 2px solid rgb(138, 43, 226)	;
+  box-shadow: 0 0 16px 4px #74036d88;
   opacity: 0.7;
   mix-blend-mode: lighten;
 }
@@ -35,7 +35,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: radial-gradient(circle, #ffb34755 0%, #ffb34700 80%);
+  background: radial-gradient(circle, #5e027c55 0%, #ffb34700 80%);
   opacity: 0.4;
   filter: blur(4px);
   pointer-events: none;

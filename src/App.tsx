@@ -11,38 +11,19 @@ import { SignUpForm } from "./components/SignUpForm";
 import { SignInForm } from "./components/SignInForm";
 import Chat from "./pages/Chat";
 import { Sidebar } from "./components/Sidebar";
-import { useState, useRef } from "react";
-import { Menu } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { Player } from "@lordicon/react";
-import type { Player as PlayerType } from "@lordicon/react";
-import {
-  Users,
-  MessageCircleMore,
-  User as UserIcon,
-} from "lucide-react";
-import IconHome from "./assets/icons/Home.json";
+import { useState } from "react";
+import { House, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Users, MessageCircleMore, User as UserIcon } from "lucide-react";
 import NeonCursor from "./components/NeonCursor";
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const homeIconRef = useRef<PlayerType | null>(null);
-  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev);
   };
-
-  const handleHomeIconClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Relance l'animation depuis la première frame
-    homeIconRef.current?.playFromBeginning();
-  };
-
   // Callback appelé lorsque l'animation est terminée
-  const onHomeAnimationComplete = () => {
-    navigate("/");
-  };
 
   return (
     <div className="min-h-screen text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
@@ -71,7 +52,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<CreatePostPages />} />
             <Route path="/post/:id" element={<PostPage />} />
-            <Route path="/community/create" element={<CreateCommunityPages />} />
+            <Route
+              path="/community/create"
+              element={<CreateCommunityPages />}
+            />
             <Route path="/communities" element={<CommunitiesPage />} />
             <Route path="/community/:id" element={<CommunityPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -85,23 +69,25 @@ function App() {
         <button
           type="button"
           className="flex flex-col text-gray-300 hover:text-white"
-          onClick={handleHomeIconClick}
         >
-          <Player
-            ref={homeIconRef}
-            icon={IconHome}
-            size={24}
-            colors="#08a88a"
-            onComplete={onHomeAnimationComplete}
-          />
+          <House size={24} />
         </button>
-        <Link to="/communities" className="flex flex-col text-gray-300 hover:text-white">
+        <Link
+          to="/communities"
+          className="flex flex-col text-gray-300 hover:text-white"
+        >
           <Users size={24} />
         </Link>
-        <Link to="/chat" className="flex flex-col text-gray-300 hover:text-white">
+        <Link
+          to="/chat"
+          className="flex flex-col text-gray-300 hover:text-white"
+        >
           <MessageCircleMore size={24} />
         </Link>
-        <Link to="/profile" className="flex flex-col text-gray-300 hover:text-white">
+        <Link
+          to="/profile"
+          className="flex flex-col text-gray-300 hover:text-white"
+        >
           <UserIcon size={24} />
         </Link>
       </nav>
