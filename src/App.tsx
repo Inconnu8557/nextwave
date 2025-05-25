@@ -16,6 +16,7 @@ import { House, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Users, MessageCircleMore, User as UserIcon } from "lucide-react";
 import NeonCursor from "./components/NeonCursor";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -60,6 +61,7 @@ function App() {
             <Route path="/community/:id" element={<CommunityPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
           </Routes>
         </div>
       </div>
