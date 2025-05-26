@@ -88,7 +88,7 @@ function App() {
       {!isSidebarVisible && (
         <button
           onClick={toggleSidebar}
-          className="fixed z-50 p-2 text-white rounded-full shadow-lg top-4 left-4 bg-black/60 hover:bg-black/80"
+          className="fixed z-50 p-2 text-white rounded-full shadow-lg top-4 left-4 bg-black/60 hover:bg-white/5"
           aria-label="Ouvrir le menu"
         >
           <Menu size={28} />
