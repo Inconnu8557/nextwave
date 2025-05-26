@@ -21,7 +21,7 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full w-56 bg-black/20 backdrop-blur-lg border-r border-white/10 transition-transform ${
+      className={`fixed top-0 left-0 h-full w-full md:w-56 bg-black/20 backdrop-blur-lg border-r border-white/10 transition-transform z-50 ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       }`}
     >

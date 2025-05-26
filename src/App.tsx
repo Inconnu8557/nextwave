@@ -12,9 +12,9 @@ import { SignInForm } from "./components/SignInForm";
 import Chat from "./pages/Chat";
 import { Sidebar } from "./components/Sidebar";
 import { useState } from "react";
-import { House, Menu } from "lucide-react";
+import { House } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Users, MessageCircleMore, User as UserIcon } from "lucide-react";
+import { Users, MessageCircleMore, User as UserIcon, Menu } from "lucide-react";
 import NeonCursor from "./components/NeonCursor";
 import VerifyEmail from "./pages/VerifyEmail";
 
@@ -31,21 +31,11 @@ function App() {
       <NeonCursor />
       <div className='fixed inset-0 bg-[url("/grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
 
-      {!isSidebarVisible && (
-        <button
-          onClick={toggleSidebar}
-          className="fixed z-50 hidden p-2 text-white transition rounded-full shadow-lg top-4 left-4 bg-black/60 hover:bg-black/80 md:block"
-        >
-          <Menu size={28} />
-        </button>
-      )}
+      <Navbar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
 
-      <Navbar />
-
+      <Sidebar isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
       <div className="flex">
-        <div className="hidden md:block">
-          <Sidebar isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
-        </div>
+        {/* Sidebar n'est plus ici, elle est globale */}
         <div className="container z-10 flex-1 px-4 py-8 mx-auto">
           <Routes>
             <Route path="/signin" element={<SignInForm />} />
@@ -93,6 +83,17 @@ function App() {
           <UserIcon size={24} />
         </Link>
       </nav>
+
+      {/* Bouton burger pour ouvrir la Sidebar */}
+      {!isSidebarVisible && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed z-50 p-2 text-white rounded-full shadow-lg top-4 left-4 bg-black/60 hover:bg-black/80"
+          aria-label="Ouvrir le menu"
+        >
+          <Menu size={28} />
+        </button>
+      )}
       {/* <canvas id="canvas" style={{position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: 10000}} /> */}
     </div>
   );
