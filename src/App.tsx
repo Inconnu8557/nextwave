@@ -14,12 +14,16 @@ import { Sidebar } from "./components/Sidebar";
 import { useState } from "react";
 import { House } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Users, MessageCircleMore, User as UserIcon, Menu } from "lucide-react";
+import { Users, MessageCircleMore, User as UserIcon } from "lucide-react";
 import NeonCursor from "./components/NeonCursor";
 import VerifyEmail from "./pages/VerifyEmail";
+import { useIsMobile } from "./hooks/useIsMobile";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const isMobile = useIsMobile();
+  const { user } = useAuth();
 
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev);
@@ -33,7 +37,10 @@ function App() {
 
       <Navbar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
 
-      <Sidebar isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
+      {/* Affiche la Sidebar sur desktop, ou sur mobile uniquement pour l'auth */}
+      {(!isMobile && isSidebarVisible) || (isMobile && !user && isSidebarVisible) ? (
+        <Sidebar isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} onlyAuthButtons={isMobile && !user} />
+      ) : null}
       <div className="flex">
         {/* Sidebar n'est plus ici, elle est globale */}
         <div className="container z-10 flex-1 px-4 py-8 mx-auto">
@@ -85,16 +92,7 @@ function App() {
       </nav>
 
       {/* Bouton burger pour ouvrir la Sidebar */}
-      {!isSidebarVisible && (
-        <button
-          onClick={toggleSidebar}
-          className="fixed z-50 p-2 text-white rounded-full shadow-lg top-4 left-4 bg-black/60 hover:bg-white/5"
-          aria-label="Ouvrir le menu"
-        >
-          <Menu size={28} />
-        </button>
-      )}
-      {/* <canvas id="canvas" style={{position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: 10000}} /> */}
+      {/* Ce bouton est supprimé pour éviter le doublon sur mobile, il est géré dans la Navbar */}
     </div>
   );
 }

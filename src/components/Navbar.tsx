@@ -9,12 +9,15 @@ export const Navbar = ({ toggleSidebar, isSidebarVisible }: { toggleSidebar: () 
   return (
     <nav className="sticky top-0 z-30 max-w-screen-xl mx-auto border-b bg-black/20 backdrop-blur-lg border-white/10">
       <div className="flex items-center justify-between w-full px-2 py-3 sm:px-4 sm:py-4">
-        {/* Burger menu for Sidebar (mobile/tablet) */}
-        <div className="flex items-center md:hidden">
+        {/* Burger menu for Sidebar (toujours en haut à gauche sur desktop) */}
+        <div className={
+          `flex items-center${!isSidebarVisible ? '': ''} ` +
+          'md:absolute md:left-4 md:top-4 md:z-40'
+        }>
           {!isSidebarVisible && (
             <button
               onClick={toggleSidebar}
-              className="inline-flex items-center justify-center p-2 text-gray-300 rounded-md hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white mr-2"
+              className="inline-flex items-center justify-center p-2 text-gray-300 rounded-md hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white mr-2 md:mr-0"
               aria-label="Ouvrir le menu de navigation"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -9,12 +9,11 @@ import {
   Home,
   PenSquare,
   Users,
-  Menu,
   X,
   MessageCircleMore,
 } from "lucide-react";
 
-export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; toggleSidebar: () => void }) => {
+export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: { isVisible: boolean; toggleSidebar: () => void; onlyAuthButtons?: boolean }) => {
   const { user } = useAuth() as {
     user: SupabaseUser | null;
   };
@@ -30,7 +29,7 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
         onClick={toggleSidebar}
         className="absolute p-2 text-white rounded-full top-4 right-4 bg-black/50 hover:bg-black/70"
       >
-        {isVisible ? <X size={24} /> : <Menu size={24} />}
+        <X size={24} />
       </button>
 
       {/* Logo */}
@@ -43,27 +42,45 @@ export const Sidebar = ({ isVisible, toggleSidebar }: { isVisible: boolean; togg
         </Link>
       </div>
       <div className="flex flex-col h-full p-4 space-y-4">
-        {/* Navigation principale */}
-        <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
-        <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
-        <NavItem to="/chat" icon={<MessageCircleMore size={18} />} text="Chat" />
-
-        {user && (
+        {!onlyAuthButtons ? (
           <>
-            {/* Boutons de création */}
+            {/* Navigation principale */}
+            <NavItem to="/" icon={<Home size={18} />} text="Accueil" />
+            <NavItem to="/communities" icon={<Users size={18} />} text="Communautés" />
+            <NavItem to="/chat" icon={<MessageCircleMore size={18} />} text="Chat" />
+            {user && (
+              <>
+                {/* Boutons de création */}
+                <Link
+                  to="/create"
+                  className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                >
+                  <PenSquare size={18} className="mr-2" />
+                  <span>Créer un post</span>
+                </Link>
+                <Link
+                  to="/community/create"
+                  className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+                >
+                  <Users size={18} className="mr-2" />
+                  <span>Créer une communauté</span>
+                </Link>
+              </>
+            )}
+          </>
+        ) : (
+          <>
             <Link
-              to="/create"
-              className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              to="/signin"
+              className="px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
             >
-              <PenSquare size={18} className="mr-2" />
-              <span>Créer un post</span>
+              Connexion
             </Link>
             <Link
-              to="/community/create"
-              className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 transition-all border rounded-lg border-white/10 hover:bg-white/5"
+              to="/signup"
+              className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
             >
-              <Users size={18} className="mr-2" />
-              <span>Créer une communauté</span>
+              Inscription
             </Link>
           </>
         )}
