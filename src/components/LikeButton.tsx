@@ -109,7 +109,7 @@ export const LikeButton = ({ postId }: Props) => {
       <button
         onClick={() => mutate(-1)}
         className={`${
-          userVote === -1 ? "bg-red-500 text-white" : "bg-gray-200 text-black"
+          userVote === -1 ? " text-white" : " text-black"
         }`}
       >
         <ThumbsDown /> {dislikes}
