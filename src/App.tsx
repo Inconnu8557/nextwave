@@ -65,12 +65,12 @@ function App() {
 
       {/* Barre d'icônes mobile en bas */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-around py-2 border-t bg-black/80 border-white/10 md:hidden">
-        <button
-          type="button"
+        <Link
+          to="/"
           className="flex flex-col text-gray-300 hover:text-white"
         >
           <House size={24} />
-        </button>
+        </Link>
         <Link
           to="/communities"
           className="flex flex-col text-gray-300 hover:text-white"
