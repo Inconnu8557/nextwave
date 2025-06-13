@@ -108,7 +108,7 @@ export const LikeButton = ({ postId }: Props) => {
       </button>
       <button
         onClick={() => mutate(-1)}
-        className={`px-4 py-2 cursor-pointer rounded transition-colors duration-150 ${
+        className={`${
           userVote === -1 ? "bg-red-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
