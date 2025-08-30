@@ -19,6 +19,8 @@ import NeonCursor from "./components/NeonCursor";
 import VerifyEmail from "./pages/VerifyEmail";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { useAuth } from "./context/AuthContext";
+import { FloatingActionButton } from "./components/FloatingActionButton";
+import { NotificationBanner } from "./components/NotificationBanner";
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -31,29 +33,34 @@ function App() {
   // Callback appelé lorsque l'animation est terminée
 
   return (
-    <div className="min-h-screen text-gray-100 transition-all duration-700 ease-in-out bg-gradient-to-b from-black via-gray-900 to-purple-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <NeonCursor />
-      <div className='fixed inset-0 bg-[url("/grid.svg")] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20'></div>
+      
+      {/* Subtle background pattern */}
+      <div className="fixed inset-0 opacity-5 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
+      </div>
 
       <Navbar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
+      
+      {/* Notification Banner */}
+      <NotificationBanner />
 
-      {/* Affiche la Sidebar sur desktop, ou sur mobile uniquement pour l'auth */}
+      {/* Sidebar */}
       {(!isMobile && isSidebarVisible) || (isMobile && !user && isSidebarVisible) ? (
         <Sidebar isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} onlyAuthButtons={isMobile && !user} />
       ) : null}
-      <div className="flex">
-        {/* Sidebar n'est plus ici, elle est globale */}
-        <div className="container z-10 flex-1 px-4 py-8 mx-auto">
+      
+      {/* Main Content */}
+      <main className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
           <Routes>
             <Route path="/signin" element={<SignInForm />} />
             <Route path="/signup" element={<SignUpForm />} />
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<CreatePostPages />} />
             <Route path="/post/:id" element={<PostPage />} />
-            <Route
-              path="/community/create"
-              element={<CreateCommunityPages />}
-            />
+            <Route path="/community/create" element={<CreateCommunityPages />} />
             <Route path="/communities" element={<CommunitiesPage />} />
             <Route path="/community/:id" element={<CommunityPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -61,38 +68,34 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmail />} />
           </Routes>
         </div>
-      </div>
+      </main>
 
-      {/* Barre d'icônes mobile en bas */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-around py-2 border-t bg-black/80 border-white/10 md:hidden">
-        <Link
-          to="/"
-          className="flex flex-col text-gray-300 hover:text-white"
-        >
-          <House size={24} />
-        </Link>
-        <Link
-          to="/communities"
-          className="flex flex-col text-gray-300 hover:text-white"
-        >
-          <Users size={24} />
-        </Link>
-        <Link
-          to="/chat"
-          className="flex flex-col text-gray-300 hover:text-white"
-        >
-          <MessageCircleMore size={24} />
-        </Link>
-        <Link
-          to="/profile"
-          className="flex flex-col text-gray-300 hover:text-white"
-        >
-          <UserIcon size={24} />
-        </Link>
+      {/* Floating Action Button - Only for authenticated users */}
+      {user && <FloatingActionButton />}
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+        <div className="bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 px-4 py-3">
+          <div className="flex justify-around items-center">
+            <Link to="/" className="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+              <House size={20} />
+              <span className="text-xs">Accueil</span>
+            </Link>
+            <Link to="/communities" className="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+              <Users size={20} />
+              <span className="text-xs">Communautés</span>
+            </Link>
+            <Link to="/chat" className="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+              <MessageCircleMore size={20} />
+              <span className="text-xs">Chat</span>
+            </Link>
+            <Link to="/profile" className="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+              <UserIcon size={20} />
+              <span className="text-xs">Profil</span>
+            </Link>
+          </div>
+        </div>
       </nav>
-
-      {/* Bouton burger pour ouvrir la Sidebar */}
-      {/* Ce bouton est supprimé pour éviter le doublon sur mobile, il est géré dans la Navbar */}
     </div>
   );
 }

@@ -1,72 +1,157 @@
 import { Link } from "react-router";
 import { Post } from "./PostList";
-import { MessageCircleMore, ThumbsUp } from "lucide-react";
+import { MessageCircle, Heart, Eye, Clock, MoreHorizontal } from "lucide-react";
+import { motion } from "motion/react";
+import { useState } from "react";
 
 interface Props {
   post: Post;
+  index?: number;
 }
 
-export const PostItem = ({ post }: Props) => {
+export const PostItem = ({ post, index = 0 }: Props) => {
+  const [imageError, setImageError] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const formatTimeAgo = (date: string) => {
+    const now = new Date();
+    const postDate = new Date(date);
+    const diffInHours = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return "Il y a quelques minutes";
+    if (diffInHours < 24) return `Il y a ${diffInHours}h`;
+    if (diffInHours < 48) return "Hier";
+    return postDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  };
+
+  const truncateContent = (content: string, maxLength: number = 120) => {
+    if (!content) return '';
+    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+  };
+
   return (
-    <div className="relative group">
-      <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 blur group-hover:opacity-75 transition-all duration-300 pointer-events-none"></div>
-      <Link to={`/post/${post.id}`} className="relative z-10 block">
-        <div className="w-[360px] bg-[rgba(24,27,32,0.8)] backdrop-blur-sm border border-white/10 rounded-[20px] text-white flex flex-col p-6 overflow-hidden transition-all duration-300 group-hover:scale-[1.02] group-hover:border-white/20">
-          {/* Header: Avatar and Title */}
-          <div className="flex items-center space-x-4">
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="group h-full"
+    >
+      <div className="card-base card-hover p-5 h-full flex flex-col">
+        {/* Header */}
+        <header className="flex items-start justify-between mb-4">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
             {post.avatar_url ? (
               <img
                 src={post.avatar_url}
-                alt="User Avatar"
-                className="w-[48px] h-[48px] rounded-full object-cover ring-2 ring-purple-500/50"
+                alt="Avatar utilisateur"
+                className="w-9 h-9 rounded-full object-cover ring-2 ring-slate-700 flex-shrink-0"
               />
             ) : (
-              <div className="w-[48px] h-[48px] rounded-full bg-gradient-to-tl from-purple-600 to-pink-600" />
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                {post.author?.username?.[0]?.toUpperCase() || 'U'}
+              </div>
             )}
-            <div className="flex flex-col flex-1">
-              <div className="text-[24px] leading-[28px] font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent line-clamp-2">
-                {post.title}
+            
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-medium text-slate-200 truncate text-sm">
+                  {post.author?.username || 'Utilisateur'}
+                </h3>
+                <span className="w-1 h-1 bg-slate-500 rounded-full flex-shrink-0"></span>
+                <time className="text-xs text-slate-400 flex-shrink-0">
+                  {formatTimeAgo(post.created_at)}
+                </time>
+              </div>
+              
+              <Link to={`/post/${post.id}`}>
+                <h2 className="text-base font-semibold text-white line-clamp-2 group-hover:text-blue-300 transition-colors leading-tight">
+                  {post.title}
+                </h2>
+              </Link>
+            </div>
+          </div>
+          
+          <button className="p-1.5 text-slate-400 hover:text-slate-300 hover:bg-slate-700/50 rounded-lg transition-colors flex-shrink-0">
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+        </header>
+
+        {/* Content Preview */}
+        <div className="flex-1 flex flex-col">
+          {post.content && (
+            <div className="mb-4">
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {isExpanded ? post.content : truncateContent(post.content)}
+                {post.content.length > 120 && (
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsExpanded(!isExpanded);
+                    }}
+                    className="ml-2 text-blue-400 hover:text-blue-300 text-xs font-medium"
+                  >
+                    {isExpanded ? 'Voir moins' : 'Voir plus'}
+                  </button>
+                )}
+              </p>
+            </div>
+          )}
+
+          {/* Image - Taille fixe pour uniformité */}
+          {post.image_url && !imageError && (
+            <Link to={`/post/${post.id}`} className="block mb-4">
+              <div className="relative overflow-hidden rounded-lg bg-slate-700/30">
+                <img
+                  src={post.image_url}
+                  alt={post.title}
+                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  onError={() => setImageError(true)}
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            </Link>
+          )}
+
+          {/* Community Tag */}
+          {post.community && (
+            <div className="mb-4">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                {post.community.name}
+              </span>
+            </div>
+          )}
+
+          {/* Spacer pour pousser le footer en bas */}
+          <div className="flex-1"></div>
+
+          {/* Footer - Actions */}
+          <footer className="pt-3 border-t border-slate-700/50 mt-auto">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 text-slate-400 text-sm">
+                  <Heart className="w-4 h-4" />
+                  <span className="font-medium">{post.like_count || 0}</span>
+                </button>
+                
+                <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-blue-500/10 hover:text-blue-400 transition-all duration-200 text-slate-400 text-sm">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="font-medium">{post.comment_count || 0}</span>
+                </button>
+                
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-500 text-sm">
+                  <Eye className="w-4 h-4" />
+                  <span className="font-medium">{post.view_count || 0}</span>
+                </div>
+              </div>
+              
+              <div className="text-xs text-slate-500 font-mono">
+                #{post.id.toString().slice(-4)}
               </div>
             </div>
-          </div>
-
-          {/* Image Banner */}
-          <div className="mt-5">
-            <img
-              src={post.image_url}
-              alt={post.title}
-              className="w-full h-[220px] rounded-[16px] object-cover shadow-lg transform transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-          </div>
-
-          {/* Footer with Reactions */}
-          <div className="flex items-center justify-between mt-5">
-            <div className="flex items-center space-x-3">
-              <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
-                <span className="text-xl"><ThumbsUp /></span>
-                <span className="text-sm font-medium">{post.like_count ?? 0}</span>
-              </span>
-              <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
-                <span className="text-xl"><MessageCircleMore /></span>
-                <span className="text-sm font-medium">{post.comment_count ?? 0}</span>
-              </span>
-              {/* <span className="flex items-center px-4 py-2 space-x-2 transition-colors rounded-full bg-white/5 hover:bg-white/10">
-                <span className="text-xl">😀</span>
-                <span className="text-sm font-medium">{post.reaction_count ?? 0}</span>
-              </span> */}
-            </div>
-            
-            <div className="flex items-center text-sm text-gray-400">
-              <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {new Date(post.created_at).toLocaleDateString()}
-              </span>
-            </div>
-          </div>
+          </footer>
         </div>
-      </Link>
-    </div>
+      </div>
+    </motion.article>
   );
 };
