@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Post } from "./PostList";
-import { MessageCircle, Heart, Eye, Clock, MoreHorizontal } from "lucide-react";
+import { MessageCircle, Heart, Eye, MoreHorizontal } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -34,37 +34,37 @@ export const PostItem = ({ post, index = 0 }: Props) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group h-full"
+      className="h-full group"
     >
-      <div className="card-base card-hover p-5 h-full flex flex-col">
+      <div className="flex flex-col h-full p-5 card-base card-hover">
         {/* Header */}
         <header className="flex items-start justify-between mb-4">
-          <div className="flex items-start gap-3 flex-1 min-w-0">
+          <div className="flex items-start flex-1 min-w-0 gap-3">
             {post.avatar_url ? (
               <img
                 src={post.avatar_url}
                 alt="Avatar utilisateur"
-                className="w-9 h-9 rounded-full object-cover ring-2 ring-slate-700 flex-shrink-0"
+                className="flex-shrink-0 object-cover rounded-full w-9 h-9 ring-2 ring-slate-700"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+              <div className="flex items-center justify-center flex-shrink-0 text-sm font-semibold text-white rounded-full w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600">
                 {post.author?.username?.[0]?.toUpperCase() || 'U'}
               </div>
             )}
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-medium text-slate-200 truncate text-sm">
+                <h3 className="text-sm font-medium truncate text-slate-200">
                   {post.author?.username || 'Utilisateur'}
                 </h3>
-                <span className="w-1 h-1 bg-slate-500 rounded-full flex-shrink-0"></span>
-                <time className="text-xs text-slate-400 flex-shrink-0">
+                <span className="flex-shrink-0 w-1 h-1 rounded-full bg-slate-500"></span>
+                <time className="flex-shrink-0 text-xs text-slate-400">
                   {formatTimeAgo(post.created_at)}
                 </time>
               </div>
               
               <Link to={`/post/${post.id}`}>
-                <h2 className="text-base font-semibold text-white line-clamp-2 group-hover:text-blue-300 transition-colors leading-tight">
+                <h2 className="text-base font-semibold leading-tight text-white transition-colors line-clamp-2 group-hover:text-blue-300">
                   {post.title}
                 </h2>
               </Link>
@@ -77,10 +77,10 @@ export const PostItem = ({ post, index = 0 }: Props) => {
         </header>
 
         {/* Content Preview */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex flex-col flex-1">
           {post.content && (
             <div className="mb-4">
-              <p className="text-slate-300 text-sm leading-relaxed">
+              <p className="text-sm leading-relaxed text-slate-300">
                 {isExpanded ? post.content : truncateContent(post.content)}
                 {post.content.length > 120 && (
                   <button 
@@ -88,7 +88,7 @@ export const PostItem = ({ post, index = 0 }: Props) => {
                       e.preventDefault();
                       setIsExpanded(!isExpanded);
                     }}
-                    className="ml-2 text-blue-400 hover:text-blue-300 text-xs font-medium"
+                    className="ml-2 text-xs font-medium text-blue-400 hover:text-blue-300"
                   >
                     {isExpanded ? 'Voir moins' : 'Voir plus'}
                   </button>
@@ -108,7 +108,7 @@ export const PostItem = ({ post, index = 0 }: Props) => {
                   onError={() => setImageError(true)}
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/20 to-transparent group-hover:opacity-100" />
               </div>
             </Link>
           )}
@@ -126,7 +126,7 @@ export const PostItem = ({ post, index = 0 }: Props) => {
           <div className="flex-1"></div>
 
           {/* Footer - Actions */}
-          <footer className="pt-3 border-t border-slate-700/50 mt-auto">
+          <footer className="pt-3 mt-auto border-t border-slate-700/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 text-slate-400 text-sm">
@@ -145,7 +145,7 @@ export const PostItem = ({ post, index = 0 }: Props) => {
                 </div>
               </div>
               
-              <div className="text-xs text-slate-500 font-mono">
+              <div className="font-mono text-xs text-slate-500">
                 #{post.id.toString().slice(-4)}
               </div>
             </div>

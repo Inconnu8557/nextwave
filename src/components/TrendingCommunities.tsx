@@ -80,8 +80,8 @@ export const TrendingCommunities = () => {
 
   if (isLoading) {
     return (
-      <div className="card-base p-6">
-        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+      <div className="p-6 card-base">
+        <h3 className="flex items-center gap-2 mb-4 text-lg font-semibold text-white">
           <Flame className="w-5 h-5 text-orange-400" />
           Communautés tendances
         </h3>
@@ -90,13 +90,13 @@ export const TrendingCommunities = () => {
             <div key={i} className="animate-pulse">
               <div className="flex items-center justify-between p-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-slate-700 rounded-lg" />
+                  <div className="w-8 h-8 rounded-lg bg-slate-700" />
                   <div>
-                    <div className="h-4 bg-slate-700 rounded w-24 mb-1" />
-                    <div className="h-3 bg-slate-700 rounded w-16" />
+                    <div className="w-24 h-4 mb-1 rounded bg-slate-700" />
+                    <div className="w-16 h-3 rounded bg-slate-700" />
                   </div>
                 </div>
-                <div className="h-3 w-8 bg-slate-700 rounded" />
+                <div className="w-8 h-3 rounded bg-slate-700" />
               </div>
             </div>
           ))}
@@ -107,17 +107,17 @@ export const TrendingCommunities = () => {
 
   if (error || !communities || communities.length === 0) {
     return (
-      <div className="card-base p-6">
-        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+      <div className="p-6 card-base">
+        <h3 className="flex items-center gap-2 mb-4 text-lg font-semibold text-white">
           <Flame className="w-5 h-5 text-orange-400" />
           Communautés tendances
         </h3>
-        <div className="text-center py-8">
-          <Users className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm mb-4">
+        <div className="py-8 text-center">
+          <Users className="w-12 h-12 mx-auto mb-3 text-slate-500" />
+          <p className="mb-4 text-sm text-slate-400">
             {error ? 'Erreur lors du chargement' : 'Aucune communauté trouvée'}
           </p>
-          <Link to="/community/create" className="btn-primary text-sm">
+          <Link to="/community/create" className="text-sm btn-primary">
             Créer la première
           </Link>
         </div>
@@ -126,28 +126,28 @@ export const TrendingCommunities = () => {
   }
 
   return (
-    <div className="card-base p-6">
-      <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+    <div className="p-6 card-base">
+      <h3 className="flex items-center gap-2 mb-4 text-lg font-semibold text-white">
         <Flame className="w-5 h-5 text-orange-400" />
         Communautés tendances
       </h3>
       
       <div className="space-y-3">
-        {communities.map((community, index) => {
+        {communities.map((community) => {
           const growth = getRandomGrowth();
           
           return (
             <Link
               key={community.id}
               to={`/community/${community.id}`}
-              className="flex items-center justify-between p-3 hover:bg-slate-800/50 rounded-lg transition-colors cursor-pointer group block"
+              className="flex items-center justify-between p-3 transition-colors rounded-lg cursor-pointer hover:bg-slate-800/50 group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                <div className="flex items-center justify-center w-8 h-8 text-xs font-bold text-white rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
                   {getCommunityInitials(community.name)}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium text-white group-hover:text-blue-300 transition-colors truncate">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-white truncate transition-colors group-hover:text-blue-300">
                     {community.name}
                   </div>
                   <div className="text-sm text-slate-400">
@@ -155,9 +155,9 @@ export const TrendingCommunities = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center flex-shrink-0 gap-2">
                 <TrendingUp className="w-3 h-3 text-green-400" />
-                <span className="text-xs text-green-400 font-medium">
+                <span className="text-xs font-medium text-green-400">
                   {growth}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export const TrendingCommunities = () => {
         
         <Link 
           to="/communities" 
-          className="block w-full text-center py-3 text-blue-400 hover:text-blue-300 font-medium transition-colors border-t border-slate-700/50 mt-4 pt-4"
+          className="block w-full py-3 pt-4 mt-4 font-medium text-center text-blue-400 transition-colors border-t hover:text-blue-300 border-slate-700/50"
         >
           Voir toutes les communautés
         </Link>
