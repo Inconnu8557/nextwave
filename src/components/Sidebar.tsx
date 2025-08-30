@@ -74,7 +74,7 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
                     <NavItem to="/trending" icon={<TrendingUp size={20} />} text="Tendances" isActive={location.pathname === '/trending'} onClick={toggleSidebar} />
                     <NavItem to="/explore" icon={<Compass size={20} />} text="Explorer" isActive={location.pathname === '/explore'} onClick={toggleSidebar} />
                     <NavItem to="/communities" icon={<Users size={20} />} text="Communautés" isActive={location.pathname === '/communities'} onClick={toggleSidebar} />
-                    <NavItem to="/chat" icon={<MessageCircle size={20} />} text="Messages" isActive={location.pathname === '/chat'} onClick={toggleSidebar} badge={3} />
+                    <NavItem to="/chat" icon={<MessageCircle size={20} />} text="Discuter avec l'ia" isActive={location.pathname === '/chat'} onClick={toggleSidebar} badge={3} />
                     {user && (
                       <>
                         <NavItem to="/bookmarks" icon={<Bookmark size={20} />} text="Favoris" isActive={location.pathname === '/bookmarks'} onClick={toggleSidebar} />
