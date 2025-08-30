@@ -44,14 +44,14 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 z-50 h-full w-80 md:w-72 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col"
+            className="fixed top-0 left-0 z-50 flex flex-col h-full border-r w-80 md:w-72 bg-slate-900/95 backdrop-blur-xl border-slate-800"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-slate-800">
               <Link to="/" onClick={toggleSidebar}>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">N</span>
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
+                    <span className="text-sm font-bold text-white">N</span>
                   </div>
                   <span className="text-xl font-bold text-gradient">NextWave</span>
                 </div>
@@ -59,7 +59,7 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
               
               <button
                 onClick={toggleSidebar}
-                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                className="p-2 transition-colors rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
               >
                 <X size={20} />
               </button>
@@ -86,12 +86,12 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
 
                   {/* Actions de création */}
                   {user && (
-                    <div className="space-y-3 pt-4 border-t border-slate-800">
-                      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3">Créer</h3>
+                    <div className="pt-4 space-y-3 border-t border-slate-800">
+                      <h3 className="px-3 text-xs font-semibold tracking-wider uppercase text-slate-400">Créer</h3><br/>
                       <Link
                         to="/create"
                         onClick={toggleSidebar}
-                        className="flex items-center gap-3 px-3 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-200 font-medium shadow-lg hover:shadow-blue-500/25"
+                        className="flex items-center gap-3 px-3 py-3 font-medium text-white transition-all duration-200 bg-blue-600 shadow-lg hover:bg-blue-700 rounded-xl hover:shadow-blue-500/25"
                       >
                         <PenSquare size={18} />
                         <span>Nouveau post</span>
@@ -109,8 +109,8 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
                   )}
 
                   {/* Trending Topics */}
-                  <div className="pt-6 border-t border-slate-800 mt-6">
-                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-3">Tendances</h3>
+                  <div className="pt-6 mt-6 border-t border-slate-800">
+                    <h3 className="px-3 mb-3 text-xs font-semibold tracking-wider uppercase text-slate-400">Tendances</h3>
                     <div className="space-y-2">
                       <TrendingItem tag="#ReactJS" posts={1234} />
                       <TrendingItem tag="#OpenSource" posts={856} />
@@ -122,22 +122,22 @@ export const Sidebar = ({ isVisible, toggleSidebar, onlyAuthButtons = false }: {
                 </nav>
               ) : (
                 <div className="p-6 space-y-4">
-                  <div className="text-center mb-6">
-                    <h2 className="text-xl font-semibold text-white mb-2">Rejoignez NextWave</h2>
-                    <p className="text-slate-400 text-sm">Connectez-vous pour découvrir une communauté de développeurs passionnés</p>
+                  <div className="mb-6 text-center">
+                    <h2 className="mb-2 text-xl font-semibold text-white">Rejoignez NextWave</h2>
+                    <p className="text-sm text-slate-400">Connectez-vous pour découvrir une communauté de développeurs passionnés</p>
                   </div>
                   
                   <Link
                     to="/signin"
                     onClick={toggleSidebar}
-                    className="btn-ghost w-full text-center"
+                    className="w-full text-center btn-ghost"
                   >
                     Se connecter
                   </Link>
                   <Link
                     to="/signup"
                     onClick={toggleSidebar}
-                    className="btn-primary w-full text-center"
+                    className="w-full text-center btn-primary"
                   >
                     Créer un compte
                   </Link>
@@ -206,10 +206,10 @@ const NavItem = ({
 );
 
 const TrendingItem = ({ tag, posts }: { tag: string; posts: number }) => (
-  <button className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-slate-800 rounded-lg transition-colors">
+  <button className="flex items-center justify-between w-full px-3 py-2 text-left transition-colors rounded-lg hover:bg-slate-800">
     <div>
-      <div className="text-slate-300 font-medium text-sm">{tag}</div>
-      <div className="text-slate-500 text-xs">{posts.toLocaleString()} posts</div>
+      <div className="text-sm font-medium text-slate-300">{tag}</div>
+      <div className="text-xs text-slate-500">{posts.toLocaleString()} posts</div>
     </div>
     <Hash className="w-4 h-4 text-slate-500" />
   </button>
@@ -230,16 +230,16 @@ const UserMenuCompact = ({
     <div className="relative">
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition-colors"
+        className="flex items-center w-full gap-3 p-3 transition-colors rounded-xl hover:bg-slate-800"
       >
         {avatar ? (
           <img
             src={avatar}
             alt="Avatar"
-            className="w-10 h-10 rounded-full object-cover ring-2 ring-slate-700"
+            className="object-cover w-10 h-10 rounded-full ring-2 ring-slate-700"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+          <div className="flex items-center justify-center w-10 h-10 font-semibold text-white rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
             {displayName[0]?.toUpperCase() || 'U'}
           </div>
         )}
@@ -256,25 +256,25 @@ const UserMenuCompact = ({
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="absolute bottom-full left-0 w-full mb-2 bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden"
+            className="absolute left-0 w-full mb-2 overflow-hidden border shadow-xl bottom-full bg-slate-800 rounded-xl border-slate-700"
           >
             <Link
               to="/profile"
-              className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-4 py-3 transition-colors text-slate-300 hover:bg-slate-700 hover:text-white"
             >
               <User size={16} />
               <span>Mon profil</span>
             </Link>
             <Link
               to="/settings"
-              className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-4 py-3 transition-colors text-slate-300 hover:bg-slate-700 hover:text-white"
             >
               <Settings size={16} />
               <span>Paramètres</span>
             </Link>
             <button
               onClick={signOut}
-              className="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-slate-700 hover:text-red-300 transition-colors w-full text-left"
+              className="flex items-center w-full gap-3 px-4 py-3 text-left text-red-400 transition-colors hover:bg-slate-700 hover:text-red-300"
             >
               <LogOut size={16} />
               <span>Se déconnecter</span>
