@@ -21,6 +21,7 @@ import { useIsMobile } from "./hooks/useIsMobile";
 import { useAuth } from "./context/AuthContext";
 import { FloatingActionButton } from "./components/FloatingActionButton";
 import { NotificationBanner } from "./components/NotificationBanner";
+import TestComponent from "./pages/Test.tsx"
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -66,6 +67,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/test" element={<TestComponent />} />
           </Routes>
         </div>
       </main>
